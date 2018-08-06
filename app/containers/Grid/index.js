@@ -10,34 +10,39 @@ import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import nanoid from 'nanoid';
 
 import Row from 'components/Row';
 import Cell from 'components/Cell';
 
-import { generateGrid } from 'helpers';
+import { generateGrid, generateIDList } from 'helpers';
 
 import injectReducer from 'utils/injectReducer';
 import makeSelectGrid from './selectors';
 import reducer from './reducer';
+import style from './style.scss';
 
-import { createGrid } from './actions';
+import { createGrid, createIDList } from './actions';
 
 export class Grid extends React.Component {
   componentDidMount() {
-    this.props.createGrid(generateGrid(10));
+    // Generate grid
+    this.props.createGrid(generateGrid(this.props.grid.size));
+    // Generate static list of unique keys for the rows.
+    // Usually the server do it for us and gives us the items
+    // with the unique IDs. It's needed for perfomance.
+    this.props.createIDList(generateIDList(this.props.grid.size));
   }
 
   render() {
     return (
-      <div>
+      <div className={style.grid}>
         <Helmet>
           <title>Grid</title>
           <meta name="description" content="Description of Grid" />
         </Helmet>
-        {this.props.grid.layout.map(row => (
-          <Row key={nanoid(3)}>
-            {row.map(cell => <Cell key={cell.id}>x</Cell>)}
+        {this.props.grid.layout.map((row, index) => (
+          <Row key={this.props.grid.idList[index]}>
+            {row.map(cell => <Cell key={cell.id} cell={cell} />)}
           </Row>
         ))}
       </div>
@@ -47,9 +52,12 @@ export class Grid extends React.Component {
 
 Grid.propTypes = {
   grid: PropTypes.shape({
+    size: PropTypes.number,
     layout: PropTypes.array,
+    idList: PropTypes.array,
   }),
   createGrid: PropTypes.func,
+  createIDList: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -59,6 +67,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     createGrid: layout => dispatch(createGrid(layout)),
+    createIDList: idList => dispatch(createIDList(idList)),
   };
 }
 

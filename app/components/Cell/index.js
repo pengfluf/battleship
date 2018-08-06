@@ -5,13 +5,17 @@
  */
 
 import React from 'react';
-// import PropTypes from 'prop-types';
-// import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import style from './style.scss';
 
-function Cell() {
-  return <div>x</div>;
+function Cell(props) {
+  return <div className={style.cell}>{props.cell.isShip ? '🚢' : 'x'}</div>;
 }
 
-Cell.propTypes = {};
+Cell.propTypes = {
+  cell: PropTypes.shape({
+    isShip: PropTypes.bool,
+  }),
+};
 
 export default Cell;

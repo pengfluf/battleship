@@ -10,9 +10,5 @@ import React from 'react';
 import Grid from 'containers/Grid';
 
 export default function App() {
-  return (
-    <div>
-      <Grid />
-    </div>
-  );
+  return <Grid />;
 }

@@ -1,0 +1,11 @@
+.cell {
+  padding: 16px 20px;
+
+  cursor: pointer;
+
+  outline: 1px dashed black;
+
+  &:hover {
+    background-color: navajowhite;
+  }
+}

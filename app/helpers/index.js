@@ -22,7 +22,7 @@ export function calcInitCell(layout) {
     [y, x] = [coords[0], coords[1]];
 
     // Check the nearest cells for ships
-    coordsAreCorrect = checkNearCells(y, x, layout);
+    coordsAreCorrect = !!checkNearCells(y, x, layout).length;
 
     // Limit the number of attempts to find a valid cell
     trials += 1;
@@ -31,6 +31,8 @@ export function calcInitCell(layout) {
 
   // Clean up the array if coordinates are incorrect
   if (!coordsAreCorrect) coords.splice(0, coords.length);
+
+  console.log(`initCell is ${coords[0]} ${coords[1]}`);
 
   // Returns the [y, x] coordinates of the cell
   // if valid cell is found. Otherwise returns [];

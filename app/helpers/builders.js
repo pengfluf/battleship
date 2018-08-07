@@ -2,58 +2,90 @@ import { calcInitCell } from './';
 import { checkNearCells, checkNearToTail } from './checkers';
 
 export function buildShip(layout, type) {
+  console.log('START SHIP BUILDING');
+
   const directions = ['up', 'right', 'down', 'left'];
   let direction = '';
   let dirIndex = null;
   let directionIsCorrect = false;
-  const coords = [];
+  const shipCoords = [];
+  const occupiedCoords = [];
 
   const initCell = calcInitCell(layout);
   console.log(`initCell is ${initCell}`);
   const [y, x] = [initCell[0], initCell[1]];
+
+  if (type === 'dotShaped') {
+    shipCoords.push(initCell);
+    occupiedCoords.push(checkNearCells(y, x, layout));
+    return {
+      shipCoords,
+      occupiedCoords,
+    };
+  }
+
+  // TODO: If bodyLength % 3 === 0, then it has
+  // a tail, so we have to check its nearest cells
+  // in the end
+  let bodyLength = 4;
+
+  if (type === 'LShaped') {
+    bodyLength = 3;
+  }
 
   while (!directionIsCorrect) {
     dirIndex = Math.floor(Math.random() * directions.length);
     direction = directions[dirIndex];
     console.log(`Building ship to ${direction}`);
 
+    // TODO: checkNearCells with for loop if ships
+    // bodyLength will be longer
     switch (direction) {
       case 'up':
-        directionIsCorrect = checkNearCells(y - 3, x, layout);
+        occupiedCoords.push(...checkNearCells(y - 3, x, layout));
+        directionIsCorrect = !!occupiedCoords.length;
         break;
       case 'right':
-        directionIsCorrect = checkNearCells(y, x + 3, layout);
+        occupiedCoords.push(...checkNearCells(y, x + 3, layout));
+        directionIsCorrect = !!occupiedCoords.length;
         break;
       case 'down':
-        directionIsCorrect = checkNearCells(y + 3, x, layout);
+        occupiedCoords.push(...checkNearCells(y + 3, x, layout));
+        directionIsCorrect = !!occupiedCoords.length;
         break;
       case 'left':
-        directionIsCorrect = checkNearCells(y, x - 3, layout);
+        occupiedCoords.push(...checkNearCells(y, x - 3, layout));
+        directionIsCorrect = !!occupiedCoords.length;
         break;
       default:
         directionIsCorrect = false;
     }
 
+    console.log(`OCCUPIED COORDS`);
+    console.log(checkNearCells(y - 3, x, layout));
+    console.log(directionIsCorrect);
+    console.log(occupiedCoords);
+
     if (directionIsCorrect) {
       switch (direction) {
         case 'up':
-          for (let i = 0; i < 3; i += 1) {
-            coords.push([y - i, x]);
+          for (let i = 0; i < bodyLength; i += 1) {
+            shipCoords.push([y - i, x]);
           }
           break;
         case 'right':
-          for (let i = 0; i < 3; i += 1) {
-            coords.push([y, x + i]);
+          for (let i = 0; i < bodyLength; i += 1) {
+            shipCoords.push([y, x + i]);
           }
           break;
         case 'down':
-          for (let i = 0; i < 3; i += 1) {
-            coords.push([y + i, x]);
+          for (let i = 0; i < bodyLength; i += 1) {
+            shipCoords.push([y + i, x]);
           }
           break;
         case 'left':
-          for (let i = 0; i < 3; i += 1) {
-            coords.push([y, x - i]);
+          for (let i = 0; i < bodyLength; i += 1) {
+            shipCoords.push([y, x - i]);
           }
           break;
         default:
@@ -66,13 +98,18 @@ export function buildShip(layout, type) {
     if (!directionIsCorrect && !directions.length) break;
   }
 
-  const lastCell = coords[coords.length - 1];
-  console.log(`lastCell is ${lastCell}`);
   if (type === 'LShaped') {
-    coords.push(buildTail(lastCell, direction, layout));
+    const lastCell = shipCoords[shipCoords.length - 1];
+    console.log(`lastCell is ${lastCell}`);
+    const tail = buildTail(lastCell, direction, layout);
+    shipCoords.push(tail.tailCoords);
+    occupiedCoords.push(tail.occupiedCoords);
   }
 
-  return coords;
+  return {
+    shipCoords,
+    occupiedCoords,
+  };
 }
 
 export function buildTail(lastCell, direction, layout) {
@@ -81,6 +118,7 @@ export function buildTail(lastCell, direction, layout) {
   let tailDirection = null;
   let tailDirIsCorrect = false;
   const tailCoords = [];
+  const occupiedCoords = [];
 
   if (direction === 'up' || direction === 'down') {
     tailDirections.push('left', 'right');
@@ -96,16 +134,28 @@ export function buildTail(lastCell, direction, layout) {
     console.log(`Tail direction is ${tailDirection}`);
     switch (tailDirection) {
       case 'up':
-        tailDirIsCorrect = checkNearToTail(y - 2, x - 1, direction, layout);
+        occupiedCoords.push(
+          ...checkNearToTail(y - 2, x - 1, direction, layout),
+        );
+        tailDirIsCorrect = !!occupiedCoords.length;
         break;
       case 'right':
-        tailDirIsCorrect = checkNearToTail(y - 1, x + 2, direction, layout);
+        occupiedCoords.push(
+          ...checkNearToTail(y - 1, x + 2, direction, layout),
+        );
+        tailDirIsCorrect = !!occupiedCoords.length;
         break;
       case 'down':
-        tailDirIsCorrect = checkNearToTail(y + 2, x - 1, direction, layout);
+        occupiedCoords.push(
+          ...checkNearToTail(y + 2, x - 1, direction, layout),
+        );
+        tailDirIsCorrect = !!occupiedCoords.length;
         break;
       case 'left':
-        tailDirIsCorrect = checkNearToTail(y - 1, x - 2, direction, layout);
+        occupiedCoords.push(
+          ...checkNearToTail(y - 1, x - 2, direction, layout),
+        );
+        tailDirIsCorrect = !!occupiedCoords.length;
         break;
       default:
         tailDirIsCorrect = false;
@@ -135,5 +185,8 @@ export function buildTail(lastCell, direction, layout) {
     }
   }
 
-  return tailCoords;
+  return {
+    tailCoords,
+    occupiedCoords,
+  };
 }

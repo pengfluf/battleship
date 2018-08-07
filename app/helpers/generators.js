@@ -8,6 +8,7 @@ export function generateGrid(size) {
       row.push({
         id: nanoid(7),
         isShip: false,
+        occupied: false,
         checked: false,
       });
     }

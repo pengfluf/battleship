@@ -7,6 +7,7 @@ injectGlobal`
   font-family: "FFKievit";
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 
   src: url(${FFKievit}) format("woff2");
 }`;

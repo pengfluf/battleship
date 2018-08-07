@@ -7,14 +7,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
 import Row from 'components/Row';
 import Cell from 'components/Cell';
 
-import { generateGrid, generateIDList } from 'helpers';
+import { generateGrid, generateIDList } from 'helpers/generators';
 
 import injectReducer from 'utils/injectReducer';
 import makeSelectGrid from './selectors';
@@ -36,10 +35,6 @@ export class Grid extends React.Component {
   render() {
     return (
       <div className={style.grid}>
-        <Helmet>
-          <title>Grid</title>
-          <meta name="description" content="Description of Grid" />
-        </Helmet>
         {this.props.grid.layout.map((row, index) => (
           <Row key={this.props.grid.idList[index]}>
             {row.map(cell => <Cell key={cell.id} cell={cell} />)}

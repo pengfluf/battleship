@@ -1,10 +1,14 @@
 .cell {
-  max-width: 47px;
+  display: block;
+
+  width: 45px;
   padding: 16px 20px;
 
   cursor: pointer;
 
+  border: none;
   outline: 1px dashed black;
+  background-color: #fff;
 
   &:hover {
     background-color: navajowhite;

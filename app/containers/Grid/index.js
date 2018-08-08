@@ -15,15 +15,21 @@ import Cell from 'components/Cell';
 
 import { generateGrid, generateIDList } from 'helpers/generators';
 import { buildShip } from 'helpers/builders';
+import { checkNearCells } from 'helpers/checkers';
 
 import injectReducer from 'utils/injectReducer';
 import makeSelectGrid from './selectors';
 import reducer from './reducer';
 import style from './style.scss';
 
-import { createGrid, createIDList, placeShip } from './actions';
+import { createGrid, createIDList, placeShip, checkCells } from './actions';
 
 export class Grid extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onClick = this.onClick.bind(this);
+  }
+
   async componentDidMount() {
     // Generate grid
     await this.props.createGrid(generateGrid(this.props.grid.size));
@@ -42,14 +48,42 @@ export class Grid extends React.Component {
       const ship = buildShip(this.props.grid.layout, type);
       this.props.placeShip(ship.shipCoords, ship.occupiedCoords);
     });
+    // const ship = buildShip(this.props.grid.layout, 'LShaped');
+    // this.props.placeShip(ship.shipCoords, ship.occupiedCoords);
+  }
+
+  onClick(cell, rowIndex, cellIndex) {
+    console.log(cell);
+    console.log(rowIndex);
+    console.log(cellIndex);
+    if (!cell.checked) {
+      const cells = checkNearCells(
+        rowIndex,
+        cellIndex,
+        this.props.grid.layout,
+        'collect',
+      );
+      console.log(cells);
+      if (cell.isShip) {
+        this.props.checkCells(cells);
+      } else {
+        this.props.checkCells([[rowIndex, cellIndex]]);
+      }
+    }
   }
 
   render() {
     return (
       <div className={style.grid}>
-        {this.props.grid.layout.map((row, index) => (
-          <Row key={this.props.grid.idList[index]}>
-            {row.map(cell => <Cell key={cell.id} cell={cell} />)}
+        {this.props.grid.layout.map((row, rowIndex) => (
+          <Row key={this.props.grid.idList[rowIndex]}>
+            {row.map((cell, cellIndex) => (
+              <Cell
+                onClick={() => this.onClick(cell, rowIndex, cellIndex)}
+                key={cell.id}
+                cell={cell}
+              />
+            ))}
           </Row>
         ))}
       </div>
@@ -66,6 +100,7 @@ Grid.propTypes = {
   createGrid: PropTypes.func,
   createIDList: PropTypes.func,
   placeShip: PropTypes.func,
+  checkCells: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -78,6 +113,7 @@ function mapDispatchToProps(dispatch) {
     createIDList: idList => dispatch(createIDList(idList)),
     placeShip: (shipCoords, occupiedCoords) =>
       dispatch(placeShip(shipCoords, occupiedCoords)),
+    checkCells: cells => dispatch(checkCells(cells)),
   };
 }
 

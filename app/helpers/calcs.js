@@ -32,9 +32,53 @@ export function calcInitCell(layout) {
   // Clean up the array if coordinates are incorrect
   if (!coordsAreCorrect) coords.splice(0, coords.length);
 
-  console.log(`initCell is ${coords[0]} ${coords[1]}`);
-
   // Returns the [y, x] coordinates of the cell
   // if valid cell is found. Otherwise returns [];
+  return coords;
+}
+
+// Returns shifted init cell coords.
+// Useful for passing it to checkers.
+// TODO: Calc shifting coefficient with for loop
+// if the ships length is longer than current
+export function calcShiftedInit(y, x, direction, type) {
+  const coords = [];
+  if (type === 'tail') {
+    // For tail
+    switch (direction) {
+      case 'up':
+        coords.push(y - 2, x - 1);
+        break;
+      case 'right':
+        coords.push(y - 1, x + 2);
+        break;
+      case 'down':
+        coords.push(y + 2, x - 1);
+        break;
+      case 'left':
+        coords.push(y - 1, x - 2);
+        break;
+      default:
+        return coords;
+    }
+  } else {
+    // For body ship
+    switch (direction) {
+      case 'up':
+        coords.push(y - 3, x);
+        break;
+      case 'right':
+        coords.push(y, x + 3);
+        break;
+      case 'down':
+        coords.push(y + 3, x);
+        break;
+      case 'left':
+        coords.push(y, x - 3);
+        break;
+      default:
+        return coords;
+    }
+  }
   return coords;
 }

@@ -5,7 +5,12 @@
  */
 
 import { fromJS } from 'immutable';
-import { CREATE_GRID, CREATE_ID_LIST, PLACE_SHIP } from './constants';
+import {
+  CREATE_GRID,
+  CREATE_ID_LIST,
+  PLACE_SHIP,
+  CHECK_CELLS,
+} from './constants';
 
 export const initialState = fromJS({
   size: 10,
@@ -24,10 +29,14 @@ function gridReducer(state = initialState, action) {
         action.shipCoords.forEach(pair => {
           st.updateIn(['layout', pair[0], pair[1], 'isShip'], () => true);
         });
-        console.log('occupiedCoords');
-        console.log(action.occupiedCoords);
         action.occupiedCoords.forEach(pair => {
           st.updateIn(['layout', pair[0], pair[1], 'occupied'], () => true);
+        });
+      });
+    case CHECK_CELLS:
+      return state.withMutations(st => {
+        action.coords.forEach(pair => {
+          st.updateIn(['layout', pair[0], pair[1], 'checked'], () => true);
         });
       });
     default:

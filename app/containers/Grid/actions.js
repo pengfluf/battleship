@@ -4,7 +4,12 @@
  *
  */
 
-import { CREATE_GRID, CREATE_ID_LIST, PLACE_SHIP } from './constants';
+import {
+  CREATE_GRID,
+  CREATE_ID_LIST,
+  PLACE_SHIP,
+  CHECK_CELLS,
+} from './constants';
 
 export function createGrid(layout) {
   return {
@@ -25,5 +30,12 @@ export function placeShip(shipCoords, occupiedCoords) {
     type: PLACE_SHIP,
     shipCoords,
     occupiedCoords,
+  };
+}
+
+export function checkCells(coords) {
+  return {
+    type: CHECK_CELLS,
+    coords,
   };
 }

@@ -52,14 +52,32 @@ export class Grid extends React.Component {
   }
 
   buildShips() {
-    const ships = ['normal', 'LShaped', 'dotShaped', 'dotShaped'];
-    ships.forEach((type, index) => {
-      const ship = buildShip(this.props.grid.layout, type);
+    const ships = [
+      {
+        name: 'normal',
+        color: 'rgba(236, 64, 122, 0.5)',
+      },
+      {
+        name: 'LShaped',
+        color: 'rgba(102, 187, 106, 0.5)',
+      },
+      {
+        name: 'dotShaped',
+        color: 'rgba(255, 167, 38, 0.5)',
+      },
+      {
+        name: 'dotShaped',
+        color: 'rgba(126, 87, 194, 0.5)',
+      },
+    ];
+    ships.forEach((item, index) => {
+      const ship = buildShip(this.props.grid.layout, item.name);
       this.props.placeShip(
         ship.shipCoords,
         ship.occupiedCoords,
         ship.shipCoords.length,
-        `${type}${index}`,
+        `${item.name}${index}`,
+        item.color,
       );
     });
   }
@@ -74,7 +92,7 @@ export class Grid extends React.Component {
       );
       if (cell.isShip) {
         this.props.checkCells(cells);
-        this.props.damageShip();
+        this.props.damageShip(cell.shipName);
       } else {
         this.props.checkCells([[rowIndex, cellIndex]]);
       }
@@ -92,11 +110,16 @@ export class Grid extends React.Component {
                   onClick={() => this.onClick(cell, rowIndex, cellIndex)}
                   key={cell.id}
                   cell={cell}
+                  ship={
+                    this.props.grid.ships[cell.shipName] !== undefined
+                      ? this.props.grid.ships[cell.shipName]
+                      : null
+                  }
                 />
               ))}
             </Row>
           ))}
-          {this.props.grid.remainingShipNum === 0 ? (
+          {this.props.grid.totalRemaining === 0 ? (
             <Overlay>
               <FinalCaption />
             </Overlay>
@@ -114,7 +137,8 @@ Grid.propTypes = {
     size: PropTypes.number,
     layout: PropTypes.array,
     idList: PropTypes.array,
-    remainingShipNum: PropTypes.number,
+    totalRemaining: PropTypes.number,
+    ships: PropTypes.object,
   }),
   startGame: PropTypes.func,
   createGrid: PropTypes.func,
@@ -133,10 +157,12 @@ function mapDispatchToProps(dispatch) {
     startGame: () => dispatch(startGame()),
     createGrid: layout => dispatch(createGrid(layout)),
     createIDList: idList => dispatch(createIDList(idList)),
-    placeShip: (shipCoords, occupiedCoords, shipLength, shipName) =>
-      dispatch(placeShip(shipCoords, occupiedCoords, shipLength, shipName)),
+    placeShip: (shipCoords, occupiedCoords, shipLength, shipName, shipColor) =>
+      dispatch(
+        placeShip(shipCoords, occupiedCoords, shipLength, shipName, shipColor),
+      ),
     checkCells: cells => dispatch(checkCells(cells)),
-    damageShip: () => dispatch(damageShip()),
+    damageShip: name => dispatch(damageShip(name)),
   };
 }
 

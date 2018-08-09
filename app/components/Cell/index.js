@@ -10,12 +10,23 @@ import style from './style.scss';
 
 function Cell(props) {
   const { checked, isShip } = props.cell;
+  const { ship } = props;
   return (
-    <button onClick={props.onClick} className={style.cell}>
+    <button
+      style={
+        ship && ship.remaining === 0 ? { backgroundColor: ship.color } : null
+      }
+      onClick={props.onClick}
+      className={style.cell}
+    >
       {/* eslint-disable no-nested-ternary */}
-      {checked && isShip ? (
+      {ship && ship.remaining === 0 ? (
         <svg className={style.icon}>
           <use xlinkHref="#icon-skull" />
+        </svg>
+      ) : checked && isShip ? (
+        <svg className={style.icon}>
+          <use xlinkHref="#icon-explosion" />
         </svg>
       ) : checked ? (
         <svg className={style.icon}>
@@ -35,6 +46,7 @@ Cell.propTypes = {
   cell: PropTypes.shape({
     isShip: PropTypes.bool,
   }),
+  ship: PropTypes.object,
   onClick: PropTypes.func,
 };
 

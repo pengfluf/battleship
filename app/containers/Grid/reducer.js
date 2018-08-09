@@ -19,7 +19,7 @@ export const initialState = fromJS({
   size: 10,
   layout: [],
   idList: [],
-  remainingShipNum: 0,
+  totalRemaining: 0,
   ships: {},
 });
 
@@ -34,18 +34,15 @@ function gridReducer(state = initialState, action) {
     case PLACE_SHIP:
       return state.withMutations(st => {
         action.shipCoords.forEach(pair => {
-          st.updateIn(
-            ['layout', pair[0], pair[1], 'isShip'],
-            () => true,
-          ).updateIn(
-            ['layout', pair[0], pair[1], 'shipName'],
-            () => action.shipName,
-          );
+          st.updateIn(['layout', pair[0], pair[1], 'isShip'], () => true)
+            .setIn(['layout', pair[0], pair[1], 'shipName'], action.shipName)
+            .setIn(['ships', action.shipName, 'remaining'], action.shipLength)
+            .setIn(['ships', action.shipName, 'color'], action.shipColor);
         });
         action.occupiedCoords.forEach(pair => {
           st.updateIn(['layout', pair[0], pair[1], 'occupied'], () => true);
         });
-        st.update('remainingShipNum', val => val + action.shipLength);
+        st.update('totalRemaining', val => val + action.shipLength);
       });
     case CHECK_CELLS:
       return state.withMutations(st => {
@@ -54,7 +51,9 @@ function gridReducer(state = initialState, action) {
         });
       });
     case DAMAGE_SHIP:
-      return state.update('remainingShipNum', val => val - 1);
+      return state
+        .update('totalRemaining', val => val - 1)
+        .updateIn(['ships', action.name, 'remaining'], val => val - 1);
     default:
       return state;
   }

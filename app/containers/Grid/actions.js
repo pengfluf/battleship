@@ -33,13 +33,20 @@ export function createIDList(idList) {
   };
 }
 
-export function placeShip(shipCoords, occupiedCoords, shipLength, shipName) {
+export function placeShip(
+  shipCoords,
+  occupiedCoords,
+  shipLength,
+  shipName,
+  shipColor,
+) {
   return {
     type: PLACE_SHIP,
     shipCoords,
     occupiedCoords,
     shipLength,
     shipName,
+    shipColor,
   };
 }
 
@@ -50,8 +57,9 @@ export function checkCells(coords) {
   };
 }
 
-export function damageShip() {
+export function damageShip(name) {
   return {
     type: DAMAGE_SHIP,
+    name,
   };
 }

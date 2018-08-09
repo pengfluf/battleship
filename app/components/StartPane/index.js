@@ -12,7 +12,7 @@ function StartPane(props) {
   return (
     <div className={style.startPane}>
       <p className={style.title}>Battleships</p>
-      <button className={style.start} onClick={props.onClick}>
+      <button className="btn btn--start" onClick={props.onClick}>
         Start
       </button>
     </div>

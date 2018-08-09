@@ -2,9 +2,7 @@
   width: 100%;
   max-width: 520px;
   max-height: 320px;
-  margin-right: 10px;
-  margin-left: 10px;
-  padding-top: 20px;
+  padding-top: 30px;
 
   text-align: center;
 
@@ -14,25 +12,4 @@
 
 .title {
   font-size: 32px;
-}
-
-.start {
-  font-size: 24px;
-
-  display: inline-block;
-
-  margin-top: 60px;
-  padding: 10px 55px;
-
-  cursor: pointer;
-  transition: all 0.3s;
-
-  border: none;
-  border: 5px solid white;
-  background-color: rgba(255,255,255,0.8);
-
-  &:hover {
-    color: white;
-    background-color: rgba(126, 87, 194, 0.7);
-  }
 }

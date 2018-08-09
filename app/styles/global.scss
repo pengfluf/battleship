@@ -1,0 +1,27 @@
+.btn {
+  font-size: 24px;
+
+  display: inline-block;
+
+  padding: 10px 55px;
+
+  cursor: pointer;
+  transition: all 0.3s;
+
+  border: none;
+  border: 5px solid white;
+  background-color: rgba(255,255,255,0.8);
+
+  &:hover {
+    color: white;
+    background-color: rgba(126, 87, 194, 0.7);
+  }
+
+  &--start {
+    margin-top: 50px;
+  }
+
+  &--again {
+    margin-top: 10px;
+  }
+}

@@ -39,16 +39,11 @@ export class Grid extends React.Component {
   constructor(props) {
     super(props);
     this.onClick = this.onClick.bind(this);
+    this.reset = this.reset.bind(this);
   }
 
-  async componentDidMount() {
-    await this.props.createIDList(generateIDList(this.props.grid.size));
-
-    // Generate grid
-    await this.props.createGrid(generateGrid(this.props.grid.size));
-
-    // Build ships and place them on the board
-    await this.buildShips();
+  componentDidMount() {
+    this.reset();
   }
 
   buildShips() {
@@ -99,6 +94,16 @@ export class Grid extends React.Component {
     }
   }
 
+  async reset() {
+    await this.props.createIDList(generateIDList(this.props.grid.size));
+
+    // Generate grid
+    await this.props.createGrid(generateGrid(this.props.grid.size));
+
+    // Build ships and place them on the board
+    await this.buildShips();
+  }
+
   render() {
     if (this.props.grid.gameStarted) {
       return (
@@ -121,7 +126,7 @@ export class Grid extends React.Component {
           ))}
           {this.props.grid.totalRemaining === 0 ? (
             <Overlay>
-              <FinalCaption />
+              <FinalCaption playAgain={this.reset} />
             </Overlay>
           ) : null}
         </div>

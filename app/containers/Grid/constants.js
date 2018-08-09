@@ -6,6 +6,9 @@
 
 export const START_GAME = 'app/Grid/START_GAME';
 
+export const ALLOW_TURN = 'app/Grid/ALLOW_TURN';
+export const FORBID_TURN = 'app/Grid/FORBID_TURN';
+
 export const CREATE_GRID = 'app/Grid/CREATE_GRID';
 export const CREATE_ID_LIST = 'app/Grid/CREATE_ID_LIST';
 

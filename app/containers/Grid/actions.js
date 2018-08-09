@@ -6,12 +6,26 @@
 
 import {
   START_GAME,
+  ALLOW_TURN,
+  FORBID_TURN,
   CREATE_GRID,
   CREATE_ID_LIST,
   PLACE_SHIP,
   CHECK_CELLS,
   DAMAGE_SHIP,
 } from './constants';
+
+export function allowTurn() {
+  return {
+    type: ALLOW_TURN,
+  };
+}
+
+export function forbidTurn() {
+  return {
+    type: FORBID_TURN,
+  };
+}
 
 export function startGame() {
   return {

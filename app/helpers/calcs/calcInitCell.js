@@ -7,8 +7,8 @@ import checkNearCells from 'helpers/checkers/checkNearCells';
  */
 export default function calcInitCell(layout) {
   const coords = [];
-  let x = null;
   let y = null;
+  let x = null;
   let coordsAreCorrect = false;
   let trials = 0;
 

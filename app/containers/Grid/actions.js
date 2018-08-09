@@ -5,11 +5,19 @@
  */
 
 import {
+  START_GAME,
   CREATE_GRID,
   CREATE_ID_LIST,
   PLACE_SHIP,
   CHECK_CELLS,
+  DAMAGE_SHIP,
 } from './constants';
+
+export function startGame() {
+  return {
+    type: START_GAME,
+  };
+}
 
 export function createGrid(layout) {
   return {
@@ -25,11 +33,13 @@ export function createIDList(idList) {
   };
 }
 
-export function placeShip(shipCoords, occupiedCoords) {
+export function placeShip(shipCoords, occupiedCoords, shipLength, shipName) {
   return {
     type: PLACE_SHIP,
     shipCoords,
     occupiedCoords,
+    shipLength,
+    shipName,
   };
 }
 
@@ -37,5 +47,11 @@ export function checkCells(coords) {
   return {
     type: CHECK_CELLS,
     coords,
+  };
+}
+
+export function damageShip() {
+  return {
+    type: DAMAGE_SHIP,
   };
 }

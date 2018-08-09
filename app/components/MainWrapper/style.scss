@@ -1,0 +1,17 @@
+.mainWrapper {
+  display: flex;
+
+  min-height: 100vh;
+  padding-top: 5vh;
+
+  background-position: -5px -6px;
+
+  justify-content: center;
+
+  @media (max-width: 575px) {
+    background-image: url("images/bgs/bg-big.jpg");
+  }
+  @media (min-width: 576px) {
+    background-image: url("images/bgs/bg.jpg");
+  }
+}

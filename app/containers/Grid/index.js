@@ -12,17 +12,28 @@ import { compose } from 'redux';
 
 import Row from 'components/Row';
 import Cell from 'components/Cell';
+import Overlay from 'components/Overlay';
+import FinalCaption from 'components/FinalCaption';
+import StartPane from 'components/StartPane';
 
-import { generateGrid, generateIDList } from 'helpers/generators';
-import { buildShip } from 'helpers/builders';
-import { checkNearCells } from 'helpers/checkers';
+import generateGrid from 'helpers/generators/generateGrid';
+import generateIDList from 'helpers/generators/generateIDList';
+import buildShip from 'helpers/builders/buildShip';
+import checkNearCells from 'helpers/checkers/checkNearCells';
 
 import injectReducer from 'utils/injectReducer';
 import makeSelectGrid from './selectors';
 import reducer from './reducer';
 import style from './style.scss';
 
-import { createGrid, createIDList, placeShip, checkCells } from './actions';
+import {
+  startGame,
+  createGrid,
+  createIDList,
+  placeShip,
+  checkCells,
+  damageShip,
+} from './actions';
 
 export class Grid extends React.Component {
   constructor(props) {
@@ -31,12 +42,10 @@ export class Grid extends React.Component {
   }
 
   async componentDidMount() {
+    await this.props.createIDList(generateIDList(this.props.grid.size));
+
     // Generate grid
     await this.props.createGrid(generateGrid(this.props.grid.size));
-    // Generate static list of unique keys for the rows.
-    // Usually the server do it for us and gives us the items
-    // with the unique IDs. It's needed for perfomance.
-    await this.props.createIDList(generateIDList(this.props.grid.size));
 
     // Build ships and place them on the board
     await this.buildShips();
@@ -44,18 +53,18 @@ export class Grid extends React.Component {
 
   buildShips() {
     const ships = ['normal', 'LShaped', 'dotShaped', 'dotShaped'];
-    ships.forEach(type => {
+    ships.forEach((type, index) => {
       const ship = buildShip(this.props.grid.layout, type);
-      this.props.placeShip(ship.shipCoords, ship.occupiedCoords);
+      this.props.placeShip(
+        ship.shipCoords,
+        ship.occupiedCoords,
+        ship.shipCoords.length,
+        `${type}${index}`,
+      );
     });
-    // const ship = buildShip(this.props.grid.layout, 'LShaped');
-    // this.props.placeShip(ship.shipCoords, ship.occupiedCoords);
   }
 
   onClick(cell, rowIndex, cellIndex) {
-    console.log(cell);
-    console.log(rowIndex);
-    console.log(cellIndex);
     if (!cell.checked) {
       const cells = checkNearCells(
         rowIndex,
@@ -63,9 +72,9 @@ export class Grid extends React.Component {
         this.props.grid.layout,
         'collect',
       );
-      console.log(cells);
       if (cell.isShip) {
         this.props.checkCells(cells);
+        this.props.damageShip();
       } else {
         this.props.checkCells([[rowIndex, cellIndex]]);
       }
@@ -73,34 +82,46 @@ export class Grid extends React.Component {
   }
 
   render() {
-    return (
-      <div className={style.grid}>
-        {this.props.grid.layout.map((row, rowIndex) => (
-          <Row key={this.props.grid.idList[rowIndex]}>
-            {row.map((cell, cellIndex) => (
-              <Cell
-                onClick={() => this.onClick(cell, rowIndex, cellIndex)}
-                key={cell.id}
-                cell={cell}
-              />
-            ))}
-          </Row>
-        ))}
-      </div>
-    );
+    if (this.props.grid.gameStarted) {
+      return (
+        <div className={style.grid}>
+          {this.props.grid.layout.map((row, rowIndex) => (
+            <Row key={this.props.grid.idList[rowIndex]}>
+              {row.map((cell, cellIndex) => (
+                <Cell
+                  onClick={() => this.onClick(cell, rowIndex, cellIndex)}
+                  key={cell.id}
+                  cell={cell}
+                />
+              ))}
+            </Row>
+          ))}
+          {this.props.grid.remainingShipNum === 0 ? (
+            <Overlay>
+              <FinalCaption />
+            </Overlay>
+          ) : null}
+        </div>
+      );
+    }
+    return <StartPane onClick={this.props.startGame} />;
   }
 }
 
 Grid.propTypes = {
   grid: PropTypes.shape({
+    gameStarted: PropTypes.bool,
     size: PropTypes.number,
     layout: PropTypes.array,
     idList: PropTypes.array,
+    remainingShipNum: PropTypes.number,
   }),
+  startGame: PropTypes.func,
   createGrid: PropTypes.func,
   createIDList: PropTypes.func,
   placeShip: PropTypes.func,
   checkCells: PropTypes.func,
+  damageShip: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -109,11 +130,13 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    startGame: () => dispatch(startGame()),
     createGrid: layout => dispatch(createGrid(layout)),
     createIDList: idList => dispatch(createIDList(idList)),
-    placeShip: (shipCoords, occupiedCoords) =>
-      dispatch(placeShip(shipCoords, occupiedCoords)),
+    placeShip: (shipCoords, occupiedCoords, shipLength, shipName) =>
+      dispatch(placeShip(shipCoords, occupiedCoords, shipLength, shipName)),
     checkCells: cells => dispatch(checkCells(cells)),
+    damageShip: () => dispatch(damageShip()),
   };
 }
 

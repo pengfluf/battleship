@@ -7,8 +7,8 @@
  */
 
 import React from 'react';
-import Grid from 'containers/Grid';
+import MainWrapper from 'components/MainWrapper';
 
 export default function App() {
-  return <Grid />;
+  return <MainWrapper />;
 }

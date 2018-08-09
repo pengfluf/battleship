@@ -1,9 +1,9 @@
 // import React from 'react';
 // import { shallow } from 'enzyme';
 
-// import Row from '../index';
+// import StartPane from '../index';
 
-describe('<Row />', () => {
+describe('<StartPane />', () => {
   it('Expect to have unit tests specified', () => {
     expect(true).toEqual(false);
   });

@@ -13,7 +13,19 @@ function Cell(props) {
   return (
     <button onClick={props.onClick} className={style.cell}>
       {/* eslint-disable no-nested-ternary */}
-      {checked && isShip ? '🚢' : checked ? '-' : 'o'}
+      {checked && isShip ? (
+        <svg className={style.icon}>
+          <use xlinkHref="#icon-skull" />
+        </svg>
+      ) : checked ? (
+        <svg className={style.icon}>
+          <use xlinkHref="#icon-seaweed" />
+        </svg>
+      ) : (
+        <svg className={style.icon}>
+          <use xlinkHref="#icon-sea" />
+        </svg>
+      )}
       {/* eslint-enable */}
     </button>
   );

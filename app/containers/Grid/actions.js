@@ -13,6 +13,9 @@ import {
   PLACE_SHIP,
   CHECK_CELLS,
   DAMAGE_SHIP,
+  USER_SCORED,
+  COMPUTER_SCORED,
+  RESET_STATS,
 } from './constants';
 
 export function allowTurn() {
@@ -75,5 +78,23 @@ export function damageShip(name) {
   return {
     type: DAMAGE_SHIP,
     name,
+  };
+}
+
+export function userScored() {
+  return {
+    type: USER_SCORED,
+  };
+}
+
+export function computerScored() {
+  return {
+    type: COMPUTER_SCORED,
+  };
+}
+
+export function resetStats() {
+  return {
+    type: RESET_STATS,
   };
 }

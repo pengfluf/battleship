@@ -14,6 +14,9 @@ import {
   PLACE_SHIP,
   CHECK_CELLS,
   DAMAGE_SHIP,
+  USER_SCORED,
+  COMPUTER_SCORED,
+  RESET_STATS,
 } from './constants';
 
 export const initialState = fromJS({
@@ -24,6 +27,10 @@ export const initialState = fromJS({
   idList: [],
   totalRemaining: 0,
   ships: {},
+  scores: {
+    user: 0,
+    computer: 0,
+  },
 });
 
 function gridReducer(state = initialState, action) {
@@ -61,6 +68,16 @@ function gridReducer(state = initialState, action) {
       return state
         .update('totalRemaining', val => val - 1)
         .updateIn(['ships', action.name, 'remaining'], val => val - 1);
+    case USER_SCORED:
+      return state.updateIn(['scores', 'user'], val => val + 1);
+    case COMPUTER_SCORED:
+      return state.updateIn(['scores', 'computer'], val => val + 1);
+    case RESET_STATS:
+      return state.withMutations(st => {
+        Object(st.get('scores')).forEach((item, index) => {
+          st.updateIn(['scores', index], () => 0);
+        });
+      });
     default:
       return state;
   }

@@ -4,7 +4,7 @@
  *
  */
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -15,6 +15,7 @@ import Cell from 'components/Cell';
 import Overlay from 'components/Overlay';
 import FinalCaption from 'components/FinalCaption';
 import StartPane from 'components/StartPane';
+import InfoPane from 'components/InfoPane';
 
 import generateGrid from 'helpers/generators/generateGrid';
 import generateIDList from 'helpers/generators/generateIDList';
@@ -37,6 +38,9 @@ import {
   placeShip,
   checkCells,
   damageShip,
+  userScored,
+  computerScored,
+  resetStats,
 } from './actions';
 
 export class Grid extends React.Component {
@@ -81,7 +85,7 @@ export class Grid extends React.Component {
     });
   }
 
-  async userTurn(cell, rowIndex, cellIndex) {
+  async turn(cell, rowIndex, cellIndex, whose) {
     if (cell.isShip) {
       const cells = checkNearCells(
         rowIndex,
@@ -91,6 +95,11 @@ export class Grid extends React.Component {
       );
       await this.props.checkCells(cells);
       await this.props.damageShip(cell.shipName);
+      if (whose === 'user') {
+        this.props.userScored();
+      } else {
+        this.props.computerScored();
+      }
     } else {
       await this.props.checkCells([[rowIndex, cellIndex]]);
     }
@@ -111,7 +120,7 @@ export class Grid extends React.Component {
 
       // Delay for human beings, computer is too fast
       const timerId = setInterval(() => {
-        this.userTurn(randomCell, y, x);
+        this.turn(randomCell, y, x, 'computer');
       }, 500);
       setTimeout(() => {
         clearInterval(timerId);
@@ -125,14 +134,16 @@ export class Grid extends React.Component {
   async makeTurn(cell, rowIndex, cellIndex) {
     if (this.props.grid.canTurn && !cell.checked) {
       const { layout } = this.props.grid;
-      // Our turn.
-      await this.userTurn(cell, rowIndex, cellIndex);
+      // Users' turn.
+      await this.turn(cell, rowIndex, cellIndex, 'user');
       // Computers' turn.
       await this.computerTurn(cell, layout);
     }
   }
 
   async reset() {
+    this.props.resetStats();
+
     await this.props.createIDList(generateIDList(this.props.grid.size));
     // Generate grid
     await this.props.createGrid(generateGrid(this.props.grid.size));
@@ -143,29 +154,35 @@ export class Grid extends React.Component {
   render() {
     if (this.props.grid.gameStarted) {
       return (
-        <div className={style.grid}>
-          {this.props.grid.layout.map((row, rowIndex) => (
-            <Row key={this.props.grid.idList[rowIndex]}>
-              {row.map((cell, cellIndex) => (
-                <Cell
-                  onClick={() => this.makeTurn(cell, rowIndex, cellIndex)}
-                  key={cell.id}
-                  cell={cell}
-                  ship={
-                    this.props.grid.ships[cell.shipName] !== undefined
-                      ? this.props.grid.ships[cell.shipName]
-                      : null
-                  }
-                />
-              ))}
-            </Row>
-          ))}
-          {this.props.grid.totalRemaining === 0 ? (
-            <Overlay>
-              <FinalCaption playAgain={this.reset} />
-            </Overlay>
-          ) : null}
-        </div>
+        <Fragment>
+          <InfoPane
+            scores={this.props.grid.scores}
+            canTurn={this.props.grid.canTurn}
+          />
+          <div className={style.grid}>
+            {this.props.grid.layout.map((row, rowIndex) => (
+              <Row key={this.props.grid.idList[rowIndex]}>
+                {row.map((cell, cellIndex) => (
+                  <Cell
+                    onClick={() => this.makeTurn(cell, rowIndex, cellIndex)}
+                    key={cell.id}
+                    cell={cell}
+                    ship={
+                      this.props.grid.ships[cell.shipName] !== undefined
+                        ? this.props.grid.ships[cell.shipName]
+                        : null
+                    }
+                  />
+                ))}
+              </Row>
+            ))}
+            {this.props.grid.totalRemaining === 0 ? (
+              <Overlay>
+                <FinalCaption playAgain={this.reset} />
+              </Overlay>
+            ) : null}
+          </div>
+        </Fragment>
       );
     }
     return <StartPane onClick={this.props.startGame} />;
@@ -181,6 +198,7 @@ Grid.propTypes = {
     idList: PropTypes.array,
     totalRemaining: PropTypes.number,
     ships: PropTypes.object,
+    scores: PropTypes.object,
   }),
   startGame: PropTypes.func,
   allowTurn: PropTypes.func,
@@ -190,6 +208,9 @@ Grid.propTypes = {
   placeShip: PropTypes.func,
   checkCells: PropTypes.func,
   damageShip: PropTypes.func,
+  userScored: PropTypes.func,
+  computerScored: PropTypes.func,
+  resetStats: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -209,6 +230,9 @@ function mapDispatchToProps(dispatch) {
       ),
     checkCells: cells => dispatch(checkCells(cells)),
     damageShip: name => dispatch(damageShip(name)),
+    userScored: () => dispatch(userScored()),
+    computerScored: () => dispatch(computerScored()),
+    resetStats: () => dispatch(resetStats()),
   };
 }
 

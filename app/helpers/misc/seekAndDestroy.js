@@ -8,6 +8,7 @@ import checkNearCells from 'helpers/checkers/checkNearCells';
  * @param {Array} layout - Layout with cell coordinates.
  * @returns {Array} - Array with coordinates for attacking.
  */
+// TODO: Chaotic and buggy. Redo.
 export default function seekAndDestroy(y, x, layout) {
   const result = [];
   const nearestUnchecked = [];
@@ -21,8 +22,6 @@ export default function seekAndDestroy(y, x, layout) {
   let prevCellX = null;
 
   do {
-    // eslint-disable-next-line
-
     oldShipsLength = nearestShips.length;
 
     // Clear the array
@@ -34,9 +33,6 @@ export default function seekAndDestroy(y, x, layout) {
       );
     }
 
-    console.log('NEAREST UNCHECKED');
-    console.log(nearestUnchecked);
-
     // If there are none, so there's nothing to seek.
     if (nearestUnchecked.length === 0) {
       break;
@@ -45,9 +41,6 @@ export default function seekAndDestroy(y, x, layout) {
       // start seeking from it.
       [cellY, cellX] = [nearestUnchecked[0][0], nearestUnchecked[0][1]];
     }
-
-    console.log('NEAREST SHIPS AFTER FILTERING');
-    console.log(nearestShips);
 
     // Delete the old ships, we've already pushed it
     // to the result.
@@ -69,6 +62,7 @@ export default function seekAndDestroy(y, x, layout) {
 
     // Clear the array from the old data.
     lastShip.splice(0, lastShip.length);
+
     // Push new last ship coordinates
     lastShip.push(...nearestShips[nearestShips.length - 1]);
 
@@ -83,9 +77,7 @@ export default function seekAndDestroy(y, x, layout) {
 
     if (prevCellY === cellY && prevCellX === cellX && nearestShips.length !== 1)
       break;
-  } while (result.length < 3);
+  } while (result.length < 4);
 
-  console.log('RESULT');
-  console.log(result);
   return result;
 }

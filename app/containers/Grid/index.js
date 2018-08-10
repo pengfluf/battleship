@@ -106,6 +106,9 @@ export class Grid extends React.Component {
   }
 
   async computerTurn(cell, layout) {
+    // The cell argument is users' choice which
+    // was made before.
+
     // Forbid user to turn and let the computer make it.
     // User turn will be allowed after computers'
     // operations are done.
@@ -127,7 +130,7 @@ export class Grid extends React.Component {
         this.props.allowTurn();
       }, 500);
     } else {
-      this.props.allowTurn();
+      await this.props.allowTurn();
     }
   }
 
@@ -152,33 +155,43 @@ export class Grid extends React.Component {
   }
 
   render() {
-    if (this.props.grid.gameStarted) {
+    const {
+      layout,
+      idList,
+      gameStarted,
+      scores,
+      canTurn,
+      ships,
+      totalRemaining,
+    } = this.props.grid;
+    if (gameStarted) {
       return (
         <Fragment>
-          <InfoPane
-            scores={this.props.grid.scores}
-            canTurn={this.props.grid.canTurn}
-          />
+          <InfoPane scores={scores} canTurn={canTurn} />
           <div className={style.grid}>
-            {this.props.grid.layout.map((row, rowIndex) => (
-              <Row key={this.props.grid.idList[rowIndex]}>
+            {layout.map((row, rowIndex) => (
+              <Row key={idList[rowIndex]}>
                 {row.map((cell, cellIndex) => (
                   <Cell
                     onClick={() => this.makeTurn(cell, rowIndex, cellIndex)}
                     key={cell.id}
                     cell={cell}
                     ship={
-                      this.props.grid.ships[cell.shipName] !== undefined
-                        ? this.props.grid.ships[cell.shipName]
+                      ships[cell.shipName] !== undefined
+                        ? ships[cell.shipName]
                         : null
                     }
                   />
                 ))}
               </Row>
             ))}
-            {this.props.grid.totalRemaining === 0 ? (
+            {totalRemaining === 0 ? (
               <Overlay>
-                <FinalCaption playAgain={this.reset} />
+                <FinalCaption
+                  playAgain={this.reset}
+                  scores={scores}
+                  totalRemaining={totalRemaining}
+                />
               </Overlay>
             ) : null}
           </div>

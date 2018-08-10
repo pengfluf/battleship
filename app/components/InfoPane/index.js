@@ -11,7 +11,7 @@ import style from './style.scss';
 function InfoPane(props) {
   return (
     <div className={style.infoPane}>
-      <p>{props.canTurn ? "Users'" : 'Computers'} turn</p>
+      <p>{props.canTurn ? "User's" : "Computer's"} turn</p>
       <p>Scores</p>
       <p>User: {props.scores.user}</p>
       <p>

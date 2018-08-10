@@ -1,10 +1,16 @@
+/**
+ * Returns coordinates of a random unchecked cell.
+ * @param {Array} layout - Layout with cell coordinates.
+ * @returns {number[]} - Coordinates of a random unchecked
+ * cell.
+ */
 export default function calcRandomUnchecked(layout) {
   const coords = [];
   let y = null;
   let x = null;
   let trials = 0;
 
-  while (trials < layout.length * 10) {
+  while (trials < layout.length * 20) {
     // Clear array if it's not empty
     if (coords.length) coords.splice(0, coords.length);
 

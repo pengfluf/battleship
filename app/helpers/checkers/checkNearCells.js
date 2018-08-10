@@ -7,7 +7,8 @@
  * shifted initial cell.
  * @param {Array} layout - Layout with cell coordinates.
  * @param {string} mode - Specifies, will it return the
- * only valid cells or just collect them all.
+ * only valid cells, collect them all or find only those
+ * that are needed for the full ship destroying.
  * @returns {Array} - Coordinates of valid or just
  * collected cells.
  */
@@ -26,8 +27,20 @@ export default function checkNearCells(y, x, layout, mode) {
       x === layout.length - 1 ? j < 1 : j < 2;
       j += 1
     ) {
-      // Set whether we filtrate or just collect coordinates
-      if (mode !== 'collect') {
+      if (mode === 'collect') {
+        // Collect mode
+        if (!layout[y + i][x + j].isShip) {
+          result.push([y + i, x + j]);
+        }
+      } else if (mode === 'findUnchecked') {
+        // Make computer more smarter and allow it
+        // check cells when a part of the ship is damaged
+        // and find the remaining part of the ship.
+        if (!layout[y + i][x + j].checked) {
+          result.push([y + i, x + j]);
+        }
+      } else {
+        // Filtrate mode
         if (
           layout[y + i][x + j] === undefined ||
           layout[y + i][x + j].isShip ||
@@ -39,8 +52,6 @@ export default function checkNearCells(y, x, layout, mode) {
         }
         // Memorize occupied cells while the
         // checking cell is valid
-        result.push([y + i, x + j]);
-      } else if (!layout[y + i][x + j].isShip) {
         result.push([y + i, x + j]);
       }
     }

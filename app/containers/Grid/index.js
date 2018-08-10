@@ -81,55 +81,62 @@ export class Grid extends React.Component {
     });
   }
 
-  async clickCell(cell, rowIndex, cellIndex) {
-    const cells = checkNearCells(
-      rowIndex,
-      cellIndex,
-      this.props.grid.layout,
-      'collect',
-    );
+  async userTurn(cell, rowIndex, cellIndex) {
     if (cell.isShip) {
+      const cells = checkNearCells(
+        rowIndex,
+        cellIndex,
+        this.props.grid.layout,
+        'collect',
+      );
       await this.props.checkCells(cells);
       await this.props.damageShip(cell.shipName);
     } else {
-      this.props.checkCells([[rowIndex, cellIndex]]);
+      await this.props.checkCells([[rowIndex, cellIndex]]);
+    }
+  }
+
+  async computerTurn(cell, layout) {
+    // Forbid user to turn and let the computer make it.
+    // User turn will be allowed after computers'
+    // operations are done.
+    await this.props.forbidTurn();
+
+    // If we damage the ship, computer can't make the
+    // next turn, otherwise it obviously can.
+    if (!cell.isShip) {
+      const randomCellCoords = await calcRandomUnchecked(layout);
+      const [y, x] = [randomCellCoords[0], randomCellCoords[1]];
+      const randomCell = layout[y][x];
+
+      // Delay for human beings, computer is too fast
+      const timerId = setInterval(() => {
+        this.userTurn(randomCell, y, x);
+      }, 500);
+      setTimeout(() => {
+        clearInterval(timerId);
+        this.props.allowTurn();
+      }, 500);
+    } else {
+      this.props.allowTurn();
     }
   }
 
   async makeTurn(cell, rowIndex, cellIndex) {
     if (this.props.grid.canTurn && !cell.checked) {
-      await this.clickCell(cell, rowIndex, cellIndex);
-
-      // Forbid user turn and let the computer make it.
-      await this.props.forbidTurn();
-
-      // If we damages the ship, computer can't make the,
-      // next turn, otherwise he obviously can.
-      if (!cell.isShip) {
-        const randomCell = await calcRandomUnchecked(this.props.grid.layout);
-        const [y, x] = [randomCell[0], randomCell[1]];
-
-        const timerId = setInterval(() => {
-          this.clickCell(this.props.grid.layout[y][x], y, x);
-        }, 500);
-
-        setTimeout(() => {
-          clearInterval(timerId);
-          this.props.allowTurn();
-        }, 500);
-      } else {
-        this.props.allowTurn();
-      }
+      const { layout } = this.props.grid;
+      // Our turn.
+      await this.userTurn(cell, rowIndex, cellIndex);
+      // Computers' turn.
+      await this.computerTurn(cell, layout);
     }
   }
 
   async reset() {
     await this.props.createIDList(generateIDList(this.props.grid.size));
-
     // Generate grid
     await this.props.createGrid(generateGrid(this.props.grid.size));
-
-    // Build ships and place them on the board
+    // Build ships and place them on a board
     await this.buildShips();
   }
 

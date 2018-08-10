@@ -1,4 +1,5 @@
 import calcShiftedInit from 'helpers/calcs/calcShiftedInit';
+import calcTailDirection from 'helpers/calcs/calcTailDirection';
 
 import checkNearToTail from 'helpers/checkers/checkNearToTail';
 
@@ -15,25 +16,16 @@ import constructPart from 'helpers/builders/constructPart';
  * occupied by the tail.
  */
 export default function buildTail(lastCell, direction, layout) {
-  const tailDirections = [];
-  let dirIndex = null;
   let tailDirection = null;
   let tailDirIsCorrect = false;
   const tailCoords = [];
   const occupiedCoords = [];
 
-  if (direction === 'up' || direction === 'down') {
-    tailDirections.push('left', 'right');
-  } else {
-    tailDirections.push('up', 'down');
-  }
-
   // Utility
   const [y, x] = [lastCell[0], lastCell[1]];
 
   while (!tailDirIsCorrect) {
-    dirIndex = Math.floor(Math.random() * tailDirections.length);
-    tailDirection = tailDirections[dirIndex];
+    tailDirection = calcTailDirection(direction);
 
     // TODO: Create separate function for the validation. DRY
 
@@ -60,9 +52,7 @@ export default function buildTail(lastCell, direction, layout) {
     // tailDirIsCorrect variable is needed for better readability.
     tailDirIsCorrect = !!occupiedCoords.length;
 
-    if (!tailDirIsCorrect) tailDirections.splice(dirIndex, 1);
-
-    if (!tailDirIsCorrect && !tailDirections.length) break;
+    if (!tailDirIsCorrect) break;
   }
 
   if (tailDirIsCorrect) {

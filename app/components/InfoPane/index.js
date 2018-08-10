@@ -15,7 +15,7 @@ function InfoPane(props) {
       <p>Scores</p>
       <p>User: {props.scores.user}</p>
       <p>
-        Computer (it{"'"}s pretty dummy): {props.scores.computer}
+        Computer (it{"'"}s dummy): {props.scores.computer}
       </p>
     </div>
   );

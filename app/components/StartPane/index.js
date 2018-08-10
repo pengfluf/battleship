@@ -6,16 +6,20 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import style from './style.scss';
+
+import Button from 'components/Button';
+
+import Wrapper from './styled/Wrapper';
+import Title from './styled/Title';
 
 function StartPane(props) {
   return (
-    <div className={style.startPane}>
-      <p className={style.title}>Battleship</p>
-      <button className="btn btn--start" onClick={props.onClick}>
+    <Wrapper>
+      <Title>Battleship</Title>
+      <Button start="true" onClick={props.onClick}>
         Play
-      </button>
-    </div>
+      </Button>
+    </Wrapper>
   );
 }
 

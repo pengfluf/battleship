@@ -7,14 +7,15 @@
 import React from 'react';
 import Grid from 'containers/Grid';
 import SvgSprite from 'components/SvgSprite';
-import style from './style.scss';
+
+import Wrapper from './styled/Wrapper';
 
 function MainWrapper() {
   return (
-    <div className={style.mainWrapper}>
+    <Wrapper>
       <SvgSprite />
       <Grid />
-    </div>
+    </Wrapper>
   );
 }
 

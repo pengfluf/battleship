@@ -6,12 +6,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import style from './style.scss';
+
+import Button from 'components/Button';
+
+import Wrapper from './styled/Wrapper';
+import Message from './styled/Message';
 
 function FinalCaption(props) {
   return (
-    <div className={style.finalCaption}>
-      <p className={style.message}>
+    <Wrapper>
+      <Message>
         {/* eslint-disable no-nested-ternary */}
         {props.scores.user > props.scores.computer
           ? 'You won!'
@@ -19,11 +23,11 @@ function FinalCaption(props) {
             ? 'Draw!'
             : 'You lost : ('}
         {/* eslint-enable */}
-      </p>
-      <button className="btn btn--again" onClick={props.playAgain}>
+      </Message>
+      <Button playAgain="true" onClick={props.playAgain}>
         Play Again
-      </button>
-    </div>
+      </Button>
+    </Wrapper>
   );
 }
 

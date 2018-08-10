@@ -8,7 +8,6 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
 
 import Row from 'components/Row';
 import Cell from 'components/Cell';
@@ -24,11 +23,9 @@ import checkNearCells from 'helpers/checkers/checkNearCells';
 
 import calcRandomUnchecked from 'helpers/calcs/calcRandomUnchecked';
 
-import injectReducer from 'utils/injectReducer';
-import makeSelectGrid from './selectors';
-import reducer from './reducer';
-import style from './style.scss';
+import GridWrapper from './styled/GridWrapper';
 
+import makeSelectGrid from './selectors';
 import {
   startGame,
   allowTurn,
@@ -85,7 +82,7 @@ export class Grid extends React.Component {
     });
   }
 
-  async turn(cell, rowIndex, cellIndex, whose) {
+  turn(cell, rowIndex, cellIndex, whose) {
     if (cell.isShip) {
       const cells = checkNearCells(
         rowIndex,
@@ -93,31 +90,31 @@ export class Grid extends React.Component {
         this.props.grid.layout,
         'collect',
       );
-      await this.props.checkCells(cells);
-      await this.props.damageShip(cell.shipName);
+      this.props.checkCells(cells);
+      this.props.damageShip(cell.shipName);
       if (whose === 'user') {
         this.props.userScored();
       } else {
         this.props.computerScored();
       }
     } else {
-      await this.props.checkCells([[rowIndex, cellIndex]]);
+      this.props.checkCells([[rowIndex, cellIndex]]);
     }
   }
 
-  async computerTurn(cell, layout) {
+  computerTurn(cell, layout) {
     // The cell argument is users' choice which
     // was made before.
 
     // Forbid user to turn and let the computer make it.
     // User turn will be allowed after computers'
     // operations are done.
-    await this.props.forbidTurn();
+    this.props.forbidTurn();
 
     // If we damage the ship, computer can't make the
     // next turn, otherwise it obviously can.
     if (!cell.isShip) {
-      const randomCellCoords = await calcRandomUnchecked(layout);
+      const randomCellCoords = calcRandomUnchecked(layout);
       const [y, x] = [randomCellCoords[0], randomCellCoords[1]];
       const randomCell = layout[y][x];
 
@@ -130,17 +127,17 @@ export class Grid extends React.Component {
         this.props.allowTurn();
       }, 500);
     } else {
-      await this.props.allowTurn();
+      this.props.allowTurn();
     }
   }
 
-  async makeTurn(cell, rowIndex, cellIndex) {
+  makeTurn(cell, rowIndex, cellIndex) {
     if (this.props.grid.canTurn && !cell.checked) {
       const { layout } = this.props.grid;
       // Users' turn.
-      await this.turn(cell, rowIndex, cellIndex, 'user');
+      this.turn(cell, rowIndex, cellIndex, 'user');
       // Computers' turn.
-      await this.computerTurn(cell, layout);
+      this.computerTurn(cell, layout);
     }
   }
 
@@ -168,7 +165,7 @@ export class Grid extends React.Component {
       return (
         <Fragment>
           <InfoPane scores={scores} canTurn={canTurn} />
-          <div className={style.grid}>
+          <GridWrapper>
             {layout.map((row, rowIndex) => (
               <Row key={idList[rowIndex]}>
                 {row.map((cell, cellIndex) => (
@@ -194,7 +191,7 @@ export class Grid extends React.Component {
                 />
               </Overlay>
             ) : null}
-          </div>
+          </GridWrapper>
         </Fragment>
       );
     }
@@ -249,14 +246,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const withConnect = connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps,
-);
-
-const withReducer = injectReducer({ key: 'grid', reducer });
-
-export default compose(
-  withReducer,
-  withConnect,
 )(Grid);

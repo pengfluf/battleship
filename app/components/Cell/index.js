@@ -6,39 +6,34 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import style from './style.scss';
+
+import SvgIcon from 'components/SvgIcon';
+
+import Wrapper from './styled/Wrapper';
 
 function Cell(props) {
   const { checked, isShip } = props.cell;
   const { ship } = props;
   return (
-    <button
+    <Wrapper
+      // Style for blinking avoiding, prob. temp.
       style={
         ship && ship.remaining === 0 ? { backgroundColor: ship.color } : null
       }
       onClick={props.onClick}
-      className={style.cell}
     >
       {/* eslint-disable no-nested-ternary */}
       {ship && ship.remaining === 0 ? (
-        <svg className={style.icon}>
-          <use xlinkHref="#icon-skull" />
-        </svg>
+        <SvgIcon name="skull" />
       ) : checked && isShip ? (
-        <svg className={style.icon}>
-          <use xlinkHref="#icon-explosion" />
-        </svg>
+        <SvgIcon name="explosion" />
       ) : checked ? (
-        <svg className={style.icon}>
-          <use xlinkHref="#icon-seaweed" />
-        </svg>
+        <SvgIcon name="seaweed" />
       ) : (
-        <svg className={style.icon}>
-          <use xlinkHref="#icon-sea" />
-        </svg>
+        <SvgIcon name="sea" />
       )}
       {/* eslint-enable */}
-    </button>
+    </Wrapper>
   );
 }
 

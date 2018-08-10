@@ -33,9 +33,8 @@ export default function checkNearCells(y, x, layout, mode) {
           result.push([y + i, x + j]);
         }
       } else if (mode === 'findUnchecked') {
-        // Make computer more smarter and allow it
-        // check cells when a part of the ship is damaged
-        // and find the remaining part of the ship.
+        // Find all the unchecked cells near
+        // the initial
         if (!layout[y + i][x + j].checked) {
           result.push([y + i, x + j]);
         }

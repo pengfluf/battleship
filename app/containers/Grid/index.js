@@ -105,11 +105,11 @@ export class Grid extends React.Component {
   }
 
   computerTurn(cell, layout) {
-    // The cell argument is users' choice which
+    // The cell argument is user's choice which
     // was made before.
 
     // Forbid user to turn and let the computer make it.
-    // User turn will be allowed after computers'
+    // User turn will be allowed after computer's
     // operations are done.
     this.props.forbidTurn();
 
@@ -136,9 +136,9 @@ export class Grid extends React.Component {
   makeTurn(cell, rowIndex, cellIndex) {
     if (this.props.grid.canTurn && !cell.checked) {
       const { layout } = this.props.grid;
-      // Users' turn.
+      // User's turn.
       this.turn(cell, rowIndex, cellIndex, 'user');
-      // Computers' turn.
+      // Computer's turn.
       this.computerTurn(cell, layout);
     }
   }

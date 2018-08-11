@@ -54,10 +54,6 @@ export default function checkNearCells(y, x, layout, mode) {
         result.push([y + i, x + j]);
       }
     }
-    // Add clicked cell to the checked ones
-    if (mode === 'collect') {
-      result.push([y, x]);
-    }
   }
   return result;
 }

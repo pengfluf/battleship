@@ -20,7 +20,7 @@ import nanoid from 'nanoid';
  * cells inside.
  */
 export default function generateGrid(size) {
-  const result = [];
+  const layout = [];
   for (let i = 0; i < size; i += 1) {
     const row = [];
     for (let j = 0; j < size; j += 1) {
@@ -31,7 +31,7 @@ export default function generateGrid(size) {
         checked: false,
       });
     }
-    result.push(row);
+    layout.push(row);
   }
-  return result;
+  return layout;
 }

@@ -48,6 +48,8 @@ export class Grid extends React.Component {
   }
 
   componentDidMount() {
+    // IDs for the rows. Need to be generated only once.
+    this.props.createIDList(generateIDList(this.props.grid.size));
     this.reset();
   }
 
@@ -141,14 +143,14 @@ export class Grid extends React.Component {
     }
   }
 
-  async reset() {
+  reset() {
     this.props.resetStats();
-
-    await this.props.createIDList(generateIDList(this.props.grid.size));
     // Generate grid
-    await this.props.createGrid(generateGrid(this.props.grid.size));
+    this.props.createGrid(generateGrid(this.props.grid.size));
     // Build ships and place them on a board
-    await this.buildShips();
+    setTimeout(() => {
+      this.buildShips();
+    }, 0);
   }
 
   render() {

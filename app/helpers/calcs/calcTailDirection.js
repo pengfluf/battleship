@@ -9,8 +9,8 @@
  * empty string if tail cannot be built.
  */
 
-export default function calcTailDirection(shipDirection) {
-  switch (shipDirection) {
+export default function calcTailDirection(bodyDirection) {
+  switch (bodyDirection) {
     case 'up':
       return 'left';
     case 'right':

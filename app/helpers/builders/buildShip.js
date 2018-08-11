@@ -1,9 +1,8 @@
 import calcInitCell from 'helpers/calcs/calcInitCell';
-import calcShiftedInit from 'helpers/calcs/calcShiftedInit';
 
 import checkNearCells from 'helpers/checkers/checkNearCells';
 
-import constructPart from 'helpers/builders/constructPart';
+import buildBody from 'helpers/builders/buildBody';
 import buildTail from 'helpers/builders/buildTail';
 
 /**
@@ -16,15 +15,13 @@ import buildTail from 'helpers/builders/buildTail';
  * occupied by the ship.
  */
 export default function buildShip(layout, type) {
-  const directions = ['up', 'right', 'down', 'left'];
-  let direction = '';
-  let dirIndex = null;
-  let directionIsCorrect = false;
   const shipCoords = [];
   const occupiedCoords = [];
   let trials = 0;
 
-  const initCell = calcInitCell(layout);
+  let initCell = calcInitCell(layout);
+  if (!initCell.length) return { shipCoords, occupiedCoords };
+
   const [y, x] = [initCell[0], initCell[1]];
 
   if (type === 'dotShaped') {
@@ -36,57 +33,32 @@ export default function buildShip(layout, type) {
     };
   }
 
-  // TODO: If bodyLength % 3 === 0, then it has
-  // a tail, so we have to check its nearest cells
-  // in the end
   let bodyLength = 4;
 
   if (type === 'LShaped') {
     bodyLength = 3;
   }
 
-  while (!directionIsCorrect) {
-    dirIndex = Math.floor(Math.random() * directions.length);
-    direction = directions[dirIndex];
+  while (trials < layout.length * 2) {
+    const body = buildBody(initCell, bodyLength, layout);
 
-    // TODO: Create separate function for the validation. DRY
-
-    // Calculate the initial shifted cell for further checking
-    const shiftedInit = calcShiftedInit(y, x, direction, 'ship');
-
-    // Utility
-    const [shiftedY, shiftedX] = [shiftedInit[0], shiftedInit[1]];
-
-    // Getting coords of cells occupied by the ship
-    occupiedCoords.push(...checkNearCells(shiftedY, shiftedX, layout));
-
-    // If we didn't get occupied coords at all, it means that
-    // the direction is wrong, so we don't actually need it.
-    // directionIsCorrect variable is needed for better readability.
-    directionIsCorrect = !!occupiedCoords.length;
-
-    // If we are still in a loop, that means the direction is wrong.
-    directions.splice(dirIndex, 1);
+    if (type === 'LShaped') {
+      const lastCell = body.coords[body.coords.length - 1];
+      const tail = buildTail(lastCell, body.direction, layout);
+      if (body.coords.length && tail.coords.length) {
+        shipCoords.push(...body.coords, ...tail.coords);
+        occupiedCoords.push(...body.occupiedCoords, ...tail.occupiedCoords);
+        break;
+      }
+    } else if (body.coords.length) {
+      shipCoords.push(...body.coords);
+      occupiedCoords.push(...body.occupiedCoords);
+      break;
+    }
 
     trials += 1;
-    if (trials > layout.length) break;
-  }
-
-  if (directionIsCorrect) {
-    shipCoords.push(...constructPart(y, x, direction, bodyLength));
-  }
-
-  if (type === 'LShaped') {
-    const lastCell = shipCoords[shipCoords.length - 1];
-    const tail = buildTail(lastCell, direction, layout);
-
-    if (tail.tailCoords.length) {
-      shipCoords.push(...tail.tailCoords);
-      occupiedCoords.push(...tail.occupiedCoords);
-    } else {
-      shipCoords.splice(0, shipCoords.length);
-      occupiedCoords.splice(0, occupiedCoords.length);
-    }
+    // Change initial cell
+    initCell = calcInitCell(layout);
   }
 
   return {

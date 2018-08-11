@@ -4,8 +4,8 @@ const Wrapper = styled.button`
   display: block;
 
   box-sizing: content-box;
-  max-height: 55px;
-  min-width: 55px;
+  height: 55px;
+  width: 55px;
   padding: 5px;
 
   cursor: pointer;

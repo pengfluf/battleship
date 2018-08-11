@@ -110,12 +110,12 @@ describe('Grid actions', () => {
 
   describe('damageShip action', () => {
     it('Returns the correct type and passed arguments', () => {
-      const shipName = 'somename';
+      const name = 'somename';
       const expected = {
         type: DAMAGE_SHIP,
-        shipName,
+        name,
       };
-      expect(damageShip(shipName)).toEqual(expected);
+      expect(damageShip(name)).toEqual(expected);
     });
   });
 

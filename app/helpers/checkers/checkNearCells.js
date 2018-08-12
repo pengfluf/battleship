@@ -13,8 +13,6 @@
  * collected cells.
  */
 export default function checkNearCells(y, x, layout, mode) {
-  // eslint-disable-next-line
-  debugger;
   const result = [];
   if (y < 0 || x < 0) return result;
   if (y > layout.length - 1 || x > layout.length - 1) return result;

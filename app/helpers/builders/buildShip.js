@@ -39,7 +39,7 @@ export default function buildShip(layout, type) {
     bodyLength = 3;
   }
 
-  while (trials < layout.length * 2) {
+  while (trials < 20) {
     const body = buildBody(initCell, bodyLength, layout);
 
     if (type === 'LShaped') {

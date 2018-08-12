@@ -40,8 +40,11 @@ function Cell(props) {
 Cell.propTypes = {
   cell: PropTypes.shape({
     isShip: PropTypes.bool,
+    checked: PropTypes.bool,
   }),
-  ship: PropTypes.object,
+  ship: PropTypes.shape({
+    remaining: PropTypes.number,
+  }),
   onClick: PropTypes.func,
 };
 

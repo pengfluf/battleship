@@ -46,9 +46,9 @@ describe('buildShip', () => {
   });
 
   it("Returns empty arrays when the ship isn't built for a long time", () => {
-    // Creating a layout which doesn't allow
-    // to build a regular 4 cell length ship, but allowing
-    // to find an initial cell
+    // Creating a layout which making it hard to
+    // build a regular 4 cell length ship, but still
+    // allowing to find a valid initial cell
     const bigLayout = generateGrid(20);
     bigLayout.forEach((row, rowIndex) => {
       row.forEach((cell, cellIndex) => {
@@ -56,9 +56,7 @@ describe('buildShip', () => {
           /* eslint-disable no-param-reassign */
           cell.isShip = true;
           cell.checked = true;
-          /* eslint-enable */
         } else if (rowIndex % 2 !== 0) {
-          /* eslint-disable no-param-reassign */
           cell.isShip = true;
           cell.checked = true;
           /* eslint-enable */

@@ -229,7 +229,7 @@ const mapStateToProps = createStructuredSelector({
   grid: makeSelectGrid(),
 });
 
-function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(dispatch) {
   return {
     startGame: () => dispatch(startGame()),
     allowTurn: () => dispatch(allowTurn()),

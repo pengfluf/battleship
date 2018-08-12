@@ -9,18 +9,18 @@ import constructPart from 'helpers/builders/constructPart';
  * Builds ships' tail and return its' coordinates, including the
  * occupied / surrounding ones.
  * @param {number[]} lastCell - The last cell of the building ship.
- * @param {string} direction - Ship's body building direction
+ * @param {string} bodyDirection - Ship's body building direction
  * (e.g. from initial cell to the top. This direction).
  * @param {Array} layout - Layout with cell coordinates.
  * @returns {{coords: Array, occupiedCoords: Array}} - All the coordinates
  * occupied by the tail.
  */
-export default function buildTail(lastCell, direction, layout) {
+export default function buildTail(lastCell, bodyDirection, layout) {
   let tailDirIsCorrect = false;
   const coords = [];
   const occupiedCoords = [];
 
-  const tailDirection = calcTailDirection(direction);
+  const tailDirection = calcTailDirection(bodyDirection);
 
   // Utility
   const [y, x] = [lastCell[0], lastCell[1]];

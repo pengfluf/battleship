@@ -49,15 +49,19 @@ describe('buildShip', () => {
     // Creating a layout which doesn't allow
     // to build a regular 4 cell length ship, but allowing
     // to find an initial cell
-    const bigLayout = generateGrid(31);
+    const bigLayout = generateGrid(20);
     bigLayout.forEach((row, rowIndex) => {
       row.forEach((cell, cellIndex) => {
-        if (rowIndex % 3 === 0 && cellIndex % 3 === 0) {
-          // eslint-disable-next-line
+        if (rowIndex % 2 !== 0 && cellIndex % 2 !== 0) {
+          /* eslint-disable no-param-reassign */
           cell.isShip = true;
-        } else if (rowIndex % 3 === 0) {
-          // eslint-disable-next-line
+          cell.checked = true;
+          /* eslint-enable */
+        } else if (rowIndex % 2 !== 0) {
+          /* eslint-disable no-param-reassign */
           cell.isShip = true;
+          cell.checked = true;
+          /* eslint-enable */
         }
       });
     });

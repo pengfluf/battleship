@@ -13,6 +13,8 @@
  * collected cells.
  */
 export default function checkNearCells(y, x, layout, mode) {
+  // eslint-disable-next-line
+  debugger;
   const result = [];
   if (y < 0 || x < 0) return result;
   if (y > layout.length - 1 || x > layout.length - 1) return result;
@@ -29,7 +31,7 @@ export default function checkNearCells(y, x, layout, mode) {
     ) {
       if (mode === 'collect') {
         // Collect mode
-        if (!layout[y + i][x + j].isShip) {
+        if (!layout[y + i][x + j].isShip && !layout[y + i][x + j].checked) {
           result.push([y + i, x + j]);
         }
       } else if (mode === 'findUnchecked') {
@@ -54,6 +56,10 @@ export default function checkNearCells(y, x, layout, mode) {
         result.push([y + i, x + j]);
       }
     }
+  }
+  // Push the initial (clicked) cell too
+  if (mode === 'collect') {
+    result.push([y, x]);
   }
   return result;
 }

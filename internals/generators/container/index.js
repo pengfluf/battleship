@@ -50,13 +50,15 @@ module.exports = {
       type: 'confirm',
       name: 'wantSaga',
       default: true,
-      message: 'Do you want sagas for asynchronous flows? (e.g. fetching data)',
+      message:
+        'Do you want sagas for asynchronous flows? (e.g. fetching data)',
     },
     {
       type: 'confirm',
       name: 'wantMessages',
       default: true,
-      message: 'Do you want i18n messages (i.e. will this component use text)?',
+      message:
+        'Do you want i18n messages (i.e. will this component use text)?',
     },
     {
       type: 'confirm',
@@ -88,7 +90,8 @@ module.exports = {
       },
       {
         type: 'add',
-        path: '../../app/containers/{{properCase name}}/tests/index.test.js',
+        path:
+          '../../app/containers/{{properCase name}}/tests/index.test.js',
         templateFile: './container/test.js.hbs',
         abortOnFail: true,
       },
@@ -116,7 +119,8 @@ module.exports = {
       });
       actions.push({
         type: 'add',
-        path: '../../app/containers/{{properCase name}}/tests/actions.test.js',
+        path:
+          '../../app/containers/{{properCase name}}/tests/actions.test.js',
         templateFile: './container/actions.test.js.hbs',
         abortOnFail: true,
       });
@@ -153,7 +157,8 @@ module.exports = {
       });
       actions.push({
         type: 'add',
-        path: '../../app/containers/{{properCase name}}/tests/reducer.test.js',
+        path:
+          '../../app/containers/{{properCase name}}/tests/reducer.test.js',
         templateFile: './container/reducer.test.js.hbs',
         abortOnFail: true,
       });
@@ -169,7 +174,8 @@ module.exports = {
       });
       actions.push({
         type: 'add',
-        path: '../../app/containers/{{properCase name}}/tests/saga.test.js',
+        path:
+          '../../app/containers/{{properCase name}}/tests/saga.test.js',
         templateFile: './container/saga.test.js.hbs',
         abortOnFail: true,
       });

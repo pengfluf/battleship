@@ -95,7 +95,7 @@ export class Grid extends React.Component {
         rowIndex,
         cellIndex,
         this.props.gridContainer.grid,
-        'collect',
+        'uncheckedAndEmpty',
       );
       this.props.checkCells(cells);
       this.props.damageShip(cell.shipName);

@@ -41,7 +41,8 @@ module.exports = {
       type: 'confirm',
       name: 'wantMessages',
       default: true,
-      message: 'Do you want i18n messages (i.e. will this component use text)?',
+      message:
+        'Do you want i18n messages (i.e. will this component use text)?',
     },
     {
       type: 'confirm',
@@ -73,7 +74,8 @@ module.exports = {
       },
       {
         type: 'add',
-        path: '../../app/components/{{properCase name}}/tests/index.test.js',
+        path:
+          '../../app/components/{{properCase name}}/tests/index.test.js',
         templateFile: './component/test.js.hbs',
         abortOnFail: true,
       },

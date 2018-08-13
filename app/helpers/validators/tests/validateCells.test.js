@@ -43,28 +43,26 @@ describe('validateCells', () => {
     [5, 5],
   ];
 
-  it('Returns the correct result in the filtrating mode', () => {
-    expect(validateCells(y, x, grid, 'filter')).toEqual(expected);
+  it('Returns the correct result in the standard validation mode', () => {
+    expect(validateCells(y, x, grid)).toEqual(expected);
   });
 
-  it('Returns an empty array in filtrating mode when some of the cells are not valid', () => {
+  it('Returns an empty array in standard validation mode when some of the cells are not valid', () => {
     grid[6][4] = undefined;
     grid[6][5].isShip = true;
     grid[6][6].occupied = true;
 
-    expect(validateCells(y, x, grid, 'filter')).toEqual([]);
+    expect(validateCells(y, x, grid)).toEqual([]);
   });
 
-  it('Returns the correct result in the collect mode', () => {
-    expect(validateCells(y, x, grid, 'collect')).toEqual(
+  it("Returns the correct result in the 'uncheckedAndEmpty' mode", () => {
+    expect(validateCells(y, x, grid, 'uncheckedAndEmpty')).toEqual(
       expectedWhenClicked,
     );
   });
 
-  it('Returns the correct result in the getUnchecked mode', () => {
-    expect(validateCells(y, x, grid, 'getUnchecked')).toEqual(
-      expected,
-    );
+  it("Returns the correct result in the 'unchecked' mode", () => {
+    expect(validateCells(y, x, grid, 'unchecked')).toEqual(expected);
   });
 
   it('Returns an empty array when y or x are less than 0', () => {

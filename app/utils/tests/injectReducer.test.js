@@ -22,7 +22,9 @@ describe('injectReducer decorator', () => {
   let ComponentWithReducer;
 
   beforeAll(() => {
-    reducerInjectors.default = jest.fn().mockImplementation(() => injectors);
+    reducerInjectors.default = jest
+      .fn()
+      .mockImplementation(() => injectors);
   });
 
   beforeEach(() => {
@@ -30,7 +32,9 @@ describe('injectReducer decorator', () => {
     injectors = {
       injectReducer: jest.fn(),
     };
-    ComponentWithReducer = injectReducer({ key: 'test', reducer })(Component);
+    ComponentWithReducer = injectReducer({ key: 'test', reducer })(
+      Component,
+    );
     reducerInjectors.default.mockClear();
   });
 
@@ -38,11 +42,16 @@ describe('injectReducer decorator', () => {
     shallow(<ComponentWithReducer />, { context: { store } });
 
     expect(injectors.injectReducer).toHaveBeenCalledTimes(1);
-    expect(injectors.injectReducer).toHaveBeenCalledWith('test', reducer);
+    expect(injectors.injectReducer).toHaveBeenCalledWith(
+      'test',
+      reducer,
+    );
   });
 
   it('should set a correct display name', () => {
-    expect(ComponentWithReducer.displayName).toBe('withReducer(Component)');
+    expect(ComponentWithReducer.displayName).toBe(
+      'withReducer(Component)',
+    );
     expect(
       injectReducer({ key: 'test', reducer })(() => null).displayName,
     ).toBe('withReducer(Component)');
@@ -50,9 +59,12 @@ describe('injectReducer decorator', () => {
 
   it('should propagate props', () => {
     const props = { testProp: 'test' };
-    const renderedComponent = shallow(<ComponentWithReducer {...props} />, {
-      context: { store },
-    });
+    const renderedComponent = shallow(
+      <ComponentWithReducer {...props} />,
+      {
+        context: { store },
+      },
+    );
 
     expect(renderedComponent.prop('testProp')).toBe('test');
   });

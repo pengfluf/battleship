@@ -18,7 +18,9 @@ function Cell(props) {
     <Wrapper
       // Style for blinking avoiding, prob. temp.
       style={
-        ship && ship.remaining === 0 ? { backgroundColor: ship.color } : null
+        ship && ship.remaining === 0
+          ? { backgroundColor: ship.color }
+          : null
       }
       onClick={props.onClick}
     >

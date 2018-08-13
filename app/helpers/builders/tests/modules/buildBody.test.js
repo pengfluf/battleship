@@ -34,7 +34,6 @@ describe('buildBody', () => {
       shiftedInit[0],
       shiftedInit[1],
       grid,
-      'filter',
     );
 
     expect(body.coords).toHaveLength(3);

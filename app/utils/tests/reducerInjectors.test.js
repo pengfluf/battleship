@@ -8,7 +8,9 @@ import identity from 'lodash/identity';
 
 import configureStore from '../../configureStore';
 
-import getInjectors, { injectReducerFactory } from '../reducerInjectors';
+import getInjectors, {
+  injectReducerFactory,
+} from '../reducerInjectors';
 
 // Fixtures
 

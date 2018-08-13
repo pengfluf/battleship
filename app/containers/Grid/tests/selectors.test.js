@@ -4,12 +4,12 @@ import makeSelectGridContainer, {
 } from '../selectors';
 
 describe('selectGridDomain', () => {
-  it('Selects grid domain correctly', () => {
+  it('Selects grid container domain correctly', () => {
     const actualState = fromJS({
-      grid: {},
+      gridContainer: {},
     });
     const mockedState = fromJS({
-      grid: actualState,
+      gridContainer: actualState,
     });
     expect(selectGridDomain(mockedState)).toEqual(actualState);
   });
@@ -19,10 +19,10 @@ describe('makeSelectGridContainer', () => {
   const gridContainerSelector = makeSelectGridContainer();
   it('Selects grid container correctly', () => {
     const actualState = {
-      grid: {},
+      gridContainer: {},
     };
     const mockedState = fromJS({
-      grid: actualState,
+      gridContainer: actualState,
     });
     expect(gridContainerSelector(mockedState)).toEqual(actualState);
   });

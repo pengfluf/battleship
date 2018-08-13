@@ -7,10 +7,10 @@
  * validation initial cell.
  * @param {Array} grid - Grid with cell coordinates.
  * @param {string} mode - Specifies, will it return the
- * only valid cells, collect them all or find only those
+ * only valid cells, uncheckedAndEmpty them all or find only those
  * that are needed for the full ship destroying.
  * @returns {Array} - Coordinates of valid or just
- * collected cells.
+ * uncheckedAndEmptyed cells.
  */
 export default function validateCells(y, x, grid, mode) {
   const result = [];
@@ -27,15 +27,15 @@ export default function validateCells(y, x, grid, mode) {
       x === grid.length - 1 ? j < 1 : j < 2;
       j += 1
     ) {
-      if (mode === 'collect') {
-        // Collect mode
+      if (mode === 'uncheckedAndEmpty') {
+        // uncheckedAndEmpty mode
         if (
           !grid[y + i][x + j].isShip &&
           !grid[y + i][x + j].checked
         ) {
           result.push([y + i, x + j]);
         }
-      } else if (mode === 'getUnchecked') {
+      } else if (mode === 'unchecked') {
         // Find all the unchecked cells near
         // the initial
         if (!grid[y + i][x + j].checked) {
@@ -59,7 +59,7 @@ export default function validateCells(y, x, grid, mode) {
     }
   }
   // Push the initial (clicked) cell too
-  if (mode === 'collect') {
+  if (mode === 'uncheckedAndEmpty') {
     result.push([y, x]);
   }
   return result;

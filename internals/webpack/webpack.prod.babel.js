@@ -78,7 +78,19 @@ module.exports = require('./webpack.base.babel')({
       icons: [
         {
           src: path.resolve('app/images/icon-512x512.png'),
-          sizes: [72, 96, 120, 128, 144, 152, 167, 180, 192, 384, 512],
+          sizes: [
+            72,
+            96,
+            120,
+            128,
+            144,
+            152,
+            167,
+            180,
+            192,
+            384,
+            512,
+          ],
         },
       ],
     }),

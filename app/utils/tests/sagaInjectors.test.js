@@ -10,7 +10,11 @@ import getInjectors, {
   injectSagaFactory,
   ejectSagaFactory,
 } from '../sagaInjectors';
-import { DAEMON, ONCE_TILL_UNMOUNT, RESTART_ON_REMOUNT } from '../constants';
+import {
+  DAEMON,
+  ONCE_TILL_UNMOUNT,
+  RESTART_ON_REMOUNT,
+} from '../constants';
 
 function* testSaga() {
   yield put({ type: 'TEST', payload: 'yup' });
@@ -90,8 +94,14 @@ describe('injectors', () => {
 
     it("should remove non daemon saga's descriptor in production", () => {
       process.env.NODE_ENV = 'production';
-      injectSaga('test', { saga: testSaga, mode: RESTART_ON_REMOUNT });
-      injectSaga('test1', { saga: testSaga, mode: ONCE_TILL_UNMOUNT });
+      injectSaga('test', {
+        saga: testSaga,
+        mode: RESTART_ON_REMOUNT,
+      });
+      injectSaga('test1', {
+        saga: testSaga,
+        mode: ONCE_TILL_UNMOUNT,
+      });
 
       ejectSaga('test');
       ejectSaga('test1');
@@ -134,7 +144,9 @@ describe('injectors', () => {
     it('it should not check a store if the second argument is true', () => {
       Reflect.deleteProperty(store, 'dispatch');
 
-      expect(() => injectSaga('test', { saga: testSaga })).not.toThrow();
+      expect(() =>
+        injectSaga('test', { saga: testSaga }),
+      ).not.toThrow();
     });
 
     it("should validate saga's key", () => {
@@ -148,15 +160,23 @@ describe('injectors', () => {
       expect(() =>
         injectSaga('test', { saga: testSaga, mode: 'testMode' }),
       ).toThrow();
-      expect(() => injectSaga('test', { saga: testSaga, mode: 1 })).toThrow();
       expect(() =>
-        injectSaga('test', { saga: testSaga, mode: RESTART_ON_REMOUNT }),
+        injectSaga('test', { saga: testSaga, mode: 1 }),
+      ).toThrow();
+      expect(() =>
+        injectSaga('test', {
+          saga: testSaga,
+          mode: RESTART_ON_REMOUNT,
+        }),
       ).not.toThrow();
       expect(() =>
         injectSaga('test', { saga: testSaga, mode: DAEMON }),
       ).not.toThrow();
       expect(() =>
-        injectSaga('test', { saga: testSaga, mode: ONCE_TILL_UNMOUNT }),
+        injectSaga('test', {
+          saga: testSaga,
+          mode: ONCE_TILL_UNMOUNT,
+        }),
       ).not.toThrow();
     });
 
@@ -173,8 +193,14 @@ describe('injectors', () => {
 
       injectSaga('test1', { saga: testSaga, mode: DAEMON });
       injectSaga('test1', { saga: testSaga, mode: DAEMON });
-      injectSaga('test2', { saga: testSaga, mode: ONCE_TILL_UNMOUNT });
-      injectSaga('test2', { saga: testSaga, mode: ONCE_TILL_UNMOUNT });
+      injectSaga('test2', {
+        saga: testSaga,
+        mode: ONCE_TILL_UNMOUNT,
+      });
+      injectSaga('test2', {
+        saga: testSaga,
+        mode: ONCE_TILL_UNMOUNT,
+      });
 
       expect(store.runSaga).toHaveBeenCalledTimes(2);
     });
@@ -184,7 +210,10 @@ describe('injectors', () => {
 
       injectSaga('test1', { saga: testSaga });
       injectSaga('test2', { saga: testSaga, mode: DAEMON });
-      injectSaga('test3', { saga: testSaga, mode: ONCE_TILL_UNMOUNT });
+      injectSaga('test3', {
+        saga: testSaga,
+        mode: ONCE_TILL_UNMOUNT,
+      });
 
       expect(store.runSaga).toHaveBeenCalledTimes(3);
     });
@@ -201,7 +230,10 @@ describe('injectors', () => {
       injectSaga('test', { saga: testSaga1 });
 
       expect(cancel).toHaveBeenCalledTimes(1);
-      expect(store.runSaga).toHaveBeenCalledWith(testSaga1, undefined);
+      expect(store.runSaga).toHaveBeenCalledWith(
+        testSaga1,
+        undefined,
+      );
     });
 
     it('should not cancel saga if different implementation in production', () => {

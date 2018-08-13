@@ -1,6 +1,6 @@
 import generateGrid from 'helpers/generators/generateGrid';
 
-import getUnchecked from '../../cell/getUnchecked';
+import getUnchecked from 'helpers/getters/cell/getUnchecked';
 
 describe('getUnchecked', () => {
   let grid = [];

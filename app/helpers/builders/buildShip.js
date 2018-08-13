@@ -1,32 +1,32 @@
-import calcInitCell from 'helpers/calcs/calcInitCell';
+import getInit from 'helpers/getters/cell/getInit';
 
-import checkNearCells from 'helpers/checkers/checkNearCells';
+import validateCells from 'helpers/validators/validateCells';
 
-import buildBody from 'helpers/builders/buildBody';
-import buildTail from 'helpers/builders/buildTail';
+import buildBody from './modules/buildBody';
+import buildTail from './modules/buildTail';
 
 /**
  * Builds ship and returns its' coordinates, including the
  * occupied / surrounding ones.
- * @param {Array} layout - Layout with cell coordinates.
+ * @param {Array} grid - Grid with cell coordinates.
  * @param {string} type - Ship type. Can be 'LShaped', 'dotShaped'.
  * If not specified, will be just regular vertical / horizontal.
  * @returns {{shipCoords: Array, occupiedCoords: Array}} - All the coordinates
  * occupied by the ship.
  */
-export default function buildShip(layout, type) {
+export default function buildShip(grid, type) {
   const shipCoords = [];
   const occupiedCoords = [];
   let trials = 0;
 
-  let initCell = calcInitCell(layout);
+  let initCell = getInit(grid);
   if (!initCell.length) return { shipCoords, occupiedCoords };
 
   const [y, x] = [initCell[0], initCell[1]];
 
   if (type === 'dotShaped') {
     shipCoords.push(initCell);
-    occupiedCoords.push(checkNearCells(y, x, layout));
+    occupiedCoords.push(validateCells(y, x, grid));
     return {
       shipCoords,
       occupiedCoords,
@@ -40,14 +40,17 @@ export default function buildShip(layout, type) {
   }
 
   while (trials < 20) {
-    const body = buildBody(initCell, bodyLength, layout);
+    const body = buildBody(initCell, bodyLength, grid);
 
     if (type === 'LShaped') {
       const lastCell = body.coords[body.coords.length - 1];
-      const tail = buildTail(lastCell, body.direction, layout);
+      const tail = buildTail(lastCell, body.direction, grid);
       if (body.coords.length && tail.coords.length) {
         shipCoords.push(...body.coords, ...tail.coords);
-        occupiedCoords.push(...body.occupiedCoords, ...tail.occupiedCoords);
+        occupiedCoords.push(
+          ...body.occupiedCoords,
+          ...tail.occupiedCoords,
+        );
         break;
       }
     } else if (body.coords.length) {
@@ -58,7 +61,7 @@ export default function buildShip(layout, type) {
 
     trials += 1;
     // Change initial cell
-    initCell = calcInitCell(layout);
+    initCell = getInit(grid);
   }
 
   return {

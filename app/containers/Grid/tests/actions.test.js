@@ -56,12 +56,12 @@ describe('Grid actions', () => {
 
   describe('createGrid action', () => {
     it('Returns the correct type and passed arguments', () => {
-      const layout = [[{ id: 1 }], [{ id: 2 }]];
+      const grid = [[{ id: 1 }], [{ id: 2 }]];
       const expected = {
         type: CREATE_GRID,
-        layout,
+        grid,
       };
-      expect(createGrid(layout)).toEqual(expected);
+      expect(createGrid(grid)).toEqual(expected);
     });
   });
 
@@ -92,7 +92,13 @@ describe('Grid actions', () => {
         shipColor,
       };
       expect(
-        placeShip(shipCoords, occupiedCoords, shipLength, shipName, shipColor),
+        placeShip(
+          shipCoords,
+          occupiedCoords,
+          shipLength,
+          shipName,
+          shipColor,
+        ),
       ).toEqual(expected);
     });
   });

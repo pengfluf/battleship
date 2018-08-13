@@ -5,7 +5,7 @@ import nanoid from 'nanoid';
  * Usually the server do it for us and gives us the items
  * with the unique IDs. It's needed for React
  * list rendering.
- * @param {number} size - Rows amount. Equals to layout size.
+ * @param {number} size - Rows amount. Equals to grid size.
  * @returns {string[]} - ID list.
  */
 export default function generateIDList(size) {

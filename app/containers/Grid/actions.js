@@ -36,10 +36,10 @@ export function startGame() {
   };
 }
 
-export function createGrid(layout) {
+export function createGrid(grid) {
   return {
     type: CREATE_GRID,
-    layout,
+    grid,
   };
 }
 

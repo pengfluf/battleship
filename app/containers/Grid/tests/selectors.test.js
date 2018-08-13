@@ -1,5 +1,7 @@
 import { fromJS } from 'immutable';
-import makeSelectGrid, { selectGridDomain } from '../selectors';
+import makeSelectGridContainer, {
+  selectGridDomain,
+} from '../selectors';
 
 describe('selectGridDomain', () => {
   it('Selects grid domain correctly', () => {
@@ -13,15 +15,15 @@ describe('selectGridDomain', () => {
   });
 });
 
-describe('makeSelectGrid', () => {
-  const gridSelector = makeSelectGrid();
-  it('Selects grid correctly', () => {
+describe('makeSelectGridContainer', () => {
+  const gridContainerSelector = makeSelectGridContainer();
+  it('Selects grid container correctly', () => {
     const actualState = {
       grid: {},
     };
     const mockedState = fromJS({
       grid: actualState,
     });
-    expect(gridSelector(mockedState)).toEqual(actualState);
+    expect(gridContainerSelector(mockedState)).toEqual(actualState);
   });
 });

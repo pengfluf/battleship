@@ -22,7 +22,7 @@ describe('gridReducer', () => {
       gameStarted: false,
       canTurn: true,
       size: 10,
-      layout: [],
+      grid: [],
       idList: [],
       totalRemaining: 0,
       ships: {},
@@ -54,15 +54,17 @@ describe('gridReducer', () => {
   });
 
   it('Handles the createGrid action correctly', () => {
-    const layout = [[{ id: 1 }], [{ id: 2 }]];
-    const expected = state.set('layout', fromJS(layout));
-    expect(gridReducer(state, createGrid(layout))).toEqual(expected);
+    const grid = [[{ id: 1 }], [{ id: 2 }]];
+    const expected = state.set('grid', fromJS(grid));
+    expect(gridReducer(state, createGrid(grid))).toEqual(expected);
   });
 
   it('Handles the createIDList action correctly', () => {
     const idList = ['id1r', 'id2t'];
     const expected = state.set('idList', fromJS(idList));
-    expect(gridReducer(state, createIDList(idList))).toEqual(expected);
+    expect(gridReducer(state, createIDList(idList))).toEqual(
+      expected,
+    );
   });
 
   it('Handles the placeShip action correctly', () => {
@@ -73,20 +75,29 @@ describe('gridReducer', () => {
     const shipColor = 'rgba(126, 87, 194, 0.5)';
     const expected = state.withMutations(st => {
       shipCoords.forEach(pair => {
-        st.updateIn(['layout', pair[0], pair[1], 'isShip'], () => true)
-          .setIn(['layout', pair[0], pair[1], 'shipName'], shipName)
+        st.updateIn(['grid', pair[0], pair[1], 'isShip'], () => true)
+          .setIn(['grid', pair[0], pair[1], 'shipName'], shipName)
           .setIn(['ships', shipName, 'remaining'], shipLength)
           .setIn(['ships', shipName, 'color'], shipColor);
       });
       occupiedCoords.forEach(pair => {
-        st.updateIn(['layout', pair[0], pair[1], 'occupied'], () => true);
+        st.updateIn(
+          ['grid', pair[0], pair[1], 'occupied'],
+          () => true,
+        );
       });
       st.update('totalRemaining', val => val + shipLength);
     });
     expect(
       gridReducer(
         state,
-        placeShip(shipCoords, occupiedCoords, shipLength, shipName, shipColor),
+        placeShip(
+          shipCoords,
+          occupiedCoords,
+          shipLength,
+          shipName,
+          shipColor,
+        ),
       ),
     ).toEqual(expected);
   });
@@ -95,7 +106,10 @@ describe('gridReducer', () => {
     const coords = [[1, 2], [3, 4]];
     const expected = state.withMutations(st => {
       coords.forEach(pair => {
-        st.updateIn(['layout', pair[0], pair[1], 'checked'], () => true);
+        st.updateIn(
+          ['grid', pair[0], pair[1], 'checked'],
+          () => true,
+        );
       });
     });
     expect(gridReducer(state, checkCells(coords))).toEqual(expected);
@@ -110,12 +124,18 @@ describe('gridReducer', () => {
   });
 
   it('Handles the userScored action correctly', () => {
-    const expected = state.updateIn(['scores', 'user'], val => val + 1);
+    const expected = state.updateIn(
+      ['scores', 'user'],
+      val => val + 1,
+    );
     expect(gridReducer(state, userScored())).toEqual(expected);
   });
 
   it('Handles the computerScored action correctly', () => {
-    const expected = state.updateIn(['scores', 'computer'], val => val + 1);
+    const expected = state.updateIn(
+      ['scores', 'computer'],
+      val => val + 1,
+    );
     expect(gridReducer(state, computerScored())).toEqual(expected);
   });
 

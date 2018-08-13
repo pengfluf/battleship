@@ -1,5 +1,5 @@
 /**
- * Calculates the tail direction depending on the
+ * Gets the tail direction depending on the
  * ship building direction.
  * Can be rewritten using array iteration and bounding
  * nearest ship and tail directions (e.g. up and right,
@@ -9,7 +9,7 @@
  * empty string if tail cannot be built.
  */
 
-export default function calcTailDirection(bodyDirection) {
+export default function getTailDirection(bodyDirection) {
   switch (bodyDirection) {
     case 'up':
       return 'left';

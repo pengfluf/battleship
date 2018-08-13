@@ -1,6 +1,6 @@
 /**
- * Return the coordinates of the shifted initial cell,
- * which is the starting point for checking / validiting cells.
+ * Returns coordinates of the shifted initial cell,
+ * which is the starting point for cell validating.
  * @param {number} y - Vertical coordinate of the initial cell.
  * @param {number} x - Horizontal coordinate of the initial cell.
  * @param {string} direction - The building direction of the
@@ -9,7 +9,7 @@
  * we want to calculate the coordinates of a shifted cell.
  * @returns {number[]} - Coordinates of a shifted cell.
  */
-export default function calcShiftedInit(y, x, direction, type) {
+export default function getValidationInit(y, x, direction, type) {
   const coords = [];
   if (type === 'tail') {
     // For tail

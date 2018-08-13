@@ -1,13 +1,13 @@
 import generateGrid from 'helpers/generators/generateGrid';
 
-import calcShiftedInit from 'helpers/calcs/calcShiftedInit';
+import getValidationInit from 'helpers/getters/cell/getValidationInit';
 
-import checkNearCells from 'helpers/checkers/checkNearCells';
+import validateCells from 'helpers/validators/validateCells';
 
-import buildBody from '../buildBody';
+import buildBody from 'helpers/builders/modules/buildBody';
 
 describe('buildBody', () => {
-  let layout = [];
+  let grid = [];
   let body = null;
   let shiftedInit = [];
   const bodyLength = 3;
@@ -20,7 +20,7 @@ describe('buildBody', () => {
   const bodyLeft = [[5, 5], [5, 4], [5, 3]];
 
   beforeEach(() => {
-    layout = generateGrid(10);
+    grid = generateGrid(10);
   });
 
   afterEach(() => {
@@ -28,12 +28,12 @@ describe('buildBody', () => {
   });
 
   it('Returns the correct result', () => {
-    body = buildBody(initCell, bodyLength, layout);
-    shiftedInit = calcShiftedInit(y, x, body.direction, 'body');
-    const occupiedCoords = checkNearCells(
+    body = buildBody(initCell, bodyLength, grid);
+    shiftedInit = getValidationInit(y, x, body.direction, 'body');
+    const occupiedCoords = validateCells(
       shiftedInit[0],
       shiftedInit[1],
-      layout,
+      grid,
       'filter',
     );
 
@@ -63,9 +63,9 @@ describe('buildBody', () => {
   });
 
   it('Returns empty arrays when the ship body cannot be built', () => {
-    layout = [];
+    grid = [];
 
-    body = buildBody(initCell, bodyLength, layout);
+    body = buildBody(initCell, bodyLength, grid);
 
     expect(body).toHaveProperty('direction');
     expect(body).toHaveProperty('coords');

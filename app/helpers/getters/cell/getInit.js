@@ -1,11 +1,11 @@
-import checkNearCells from 'helpers/checkers/checkNearCells';
+import validateCells from 'helpers/validators/validateCells';
 
 /**
- * Calculates the initial cell coordinates for building a ship.
- * @param {Array} layout - Layout with cell coordinates.
+ * Get the initial cell coordinates for building a ship.
+ * @param {Array} grid - Grid with cell coordinates.
  * @returns {number[]} - Initial cell coordinates.
  */
-export default function calcInitCell(layout) {
+export default function getInit(grid) {
   const coords = [];
   let y = null;
   let x = null;
@@ -18,18 +18,18 @@ export default function calcInitCell(layout) {
 
     // Randomly choose the coordinates
     for (let i = 0; i < 2; i += 1) {
-      coords.push(Math.floor(Math.random() * layout.length));
+      coords.push(Math.floor(Math.random() * grid.length));
     }
 
     // For utility
     [y, x] = [coords[0], coords[1]];
 
     // Check the nearest cells for ships
-    coordsAreCorrect = !!checkNearCells(y, x, layout).length;
+    coordsAreCorrect = !!validateCells(y, x, grid).length;
 
     // Limit the number of attempts to find a valid cell
     trials += 1;
-    if (trials > layout.length * 2) break;
+    if (trials > grid.length * 2) break;
   }
 
   // Clean up the array if coordinates are incorrect

@@ -1,5 +1,5 @@
 /**
- * Constructs the part of the ship. Uses after all validations.
+ * Constructs a part of the ship. Uses after all validations.
  * @param {number} y - Vertical coordinate of the initial cell.
  * @param {number} x - Horizontal coordinate of the initial cell.
  * @param {string} direction - Determines in which direction the ship
@@ -9,12 +9,13 @@
  * @returns {Array} - Array of ship (or its' part) coordinates.
  */
 
-export default function constructPart(y, x, direction, bodyLength) {
+export default function construct(y, x, direction, bodyLength) {
   const result = [];
   let tailShift = 0;
 
   // If bodyLength equals 1, it means that we're
-  // constructing a tail, so we need a shift for it.
+  // constructing a tail, so we need to shift
+  // its initial coordinates.
   if (bodyLength === 1) tailShift = 1;
 
   switch (direction) {

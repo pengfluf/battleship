@@ -1,29 +1,29 @@
 /**
  * Returns coordinates of a random unchecked cell.
- * @param {Array} layout - Layout with cell coordinates.
+ * @param {Array} grid - Grid with cell coordinates.
  * @returns {number[]} - Coordinates of a random unchecked
  * cell.
  */
-export default function calcRandomUnchecked(layout) {
+export default function getUnchecked(grid) {
   const coords = [];
   let y = null;
   let x = null;
   let trials = 0;
 
-  while (trials < layout.length * 20) {
+  while (trials < grid.length * 20) {
     // Clear array if it's not empty
     if (coords.length) coords.splice(0, coords.length);
 
     // Randomly choose the coordinates
     for (let i = 0; i < 2; i += 1) {
-      coords.push(Math.floor(Math.random() * layout.length));
+      coords.push(Math.floor(Math.random() * grid.length));
     }
 
     // For utility
     [y, x] = [coords[0], coords[1]];
 
     // If unchecked cell is found return its' coordinates.
-    if (!layout[y][x].checked) {
+    if (!grid[y][x].checked) {
       return coords;
     }
 

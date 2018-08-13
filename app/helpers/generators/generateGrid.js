@@ -15,12 +15,12 @@ import nanoid from 'nanoid';
 
 /**
  *
- * @param {number} size - Specifies layout size (e.g. 10x10).
- * @returns {Array} - The whole layout with rows and
+ * @param {number} size - Specifies grid size (e.g. 10x10).
+ * @returns {Array} - The whole grid with rows and
  * cells inside.
  */
 export default function generateGrid(size) {
-  const layout = [];
+  const grid = [];
   for (let i = 0; i < size; i += 1) {
     const row = [];
     for (let j = 0; j < size; j += 1) {
@@ -31,7 +31,7 @@ export default function generateGrid(size) {
         checked: false,
       });
     }
-    layout.push(row);
+    grid.push(row);
   }
-  return layout;
+  return grid;
 }

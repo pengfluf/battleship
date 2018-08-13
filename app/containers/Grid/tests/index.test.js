@@ -61,9 +61,9 @@ describe('<Grid />', () => {
       });
 
       it('Dispatches createGrid', () => {
-        const layout = [[{ id: 1 }], [{ id: 2 }]];
-        result.createGrid(layout);
-        expect(dispatch).toHaveBeenCalledWith(createGrid(layout));
+        const grid = [[{ id: 1 }], [{ id: 2 }]];
+        result.createGrid(grid);
+        expect(dispatch).toHaveBeenCalledWith(createGrid(grid));
       });
     });
 

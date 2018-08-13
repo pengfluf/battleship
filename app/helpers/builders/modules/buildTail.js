@@ -1,26 +1,26 @@
-import calcShiftedInit from 'helpers/calcs/calcShiftedInit';
-import calcTailDirection from 'helpers/calcs/calcTailDirection';
+import getValidationInit from 'helpers/getters/cell/getValidationInit';
+import getTailDirection from 'helpers/getters/getTailDirection';
 
-import checkNearToTail from 'helpers/checkers/checkNearToTail';
+import validateTail from 'helpers/validators/validateTail';
 
-import constructPart from 'helpers/builders/constructPart';
+import construct from './construct';
 
 /**
- * Builds ships' tail and return its' coordinates, including the
+ * Builds ship's tail and return it's coordinates, including the
  * occupied / surrounding ones.
  * @param {number[]} lastCell - The last cell of the building ship.
  * @param {string} bodyDirection - Ship's body building direction
  * (e.g. from initial cell to the top. This direction).
- * @param {Array} layout - Layout with cell coordinates.
+ * @param {Array} grid - Grid with cell coordinates.
  * @returns {{coords: Array, occupiedCoords: Array}} - All the coordinates
  * occupied by the tail.
  */
-export default function buildTail(lastCell, bodyDirection, layout) {
+export default function buildTail(lastCell, bodyDirection, grid) {
   let tailDirIsCorrect = false;
   const coords = [];
   const occupiedCoords = [];
 
-  const tailDirection = calcTailDirection(bodyDirection);
+  const tailDirection = getTailDirection(bodyDirection);
 
   // Utility
   const [y, x] = [lastCell[0], lastCell[1]];
@@ -28,8 +28,13 @@ export default function buildTail(lastCell, bodyDirection, layout) {
   while (!tailDirIsCorrect) {
     // TODO: Create separate function for the validation. DRY
 
-    // Calculate the initial shifted cell for further checking
-    const shiftedInit = calcShiftedInit(y, x, tailDirection, 'tail');
+    // Calculate the initial shifted cell for further validation
+    const shiftedInit = getValidationInit(
+      y,
+      x,
+      tailDirection,
+      'tail',
+    );
 
     // Utility
     const [shiftedY, shiftedX] = [shiftedInit[0], shiftedInit[1]];
@@ -37,12 +42,12 @@ export default function buildTail(lastCell, bodyDirection, layout) {
     if (
       shiftedY >= 0 &&
       shiftedX >= 0 &&
-      shiftedY <= layout.length - 1 &&
-      shiftedX <= layout.length - 1
+      shiftedY <= grid.length - 1 &&
+      shiftedX <= grid.length - 1
     ) {
       // Getting coords of cells occupied by the ship
       occupiedCoords.push(
-        ...checkNearToTail(shiftedY, shiftedX, tailDirection, layout),
+        ...validateTail(shiftedY, shiftedX, tailDirection, grid),
       );
     }
 
@@ -55,7 +60,7 @@ export default function buildTail(lastCell, bodyDirection, layout) {
   }
 
   if (tailDirIsCorrect) {
-    coords.push(...constructPart(y, x, tailDirection, 1));
+    coords.push(...construct(y, x, tailDirection, 1));
   }
 
   return {

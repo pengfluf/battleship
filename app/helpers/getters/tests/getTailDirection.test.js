@@ -1,23 +1,23 @@
-import calcTailDirection from '../calcTailDirection';
+import getTailDirection from '../getTailDirection';
 
-describe('calcTailDirection', () => {
+describe('getTailDirection', () => {
   it('Returns the correct result when the direction is up', () => {
-    expect(calcTailDirection('up')).toEqual('left');
+    expect(getTailDirection('up')).toEqual('left');
   });
 
   it('Returns the correct result when the direction is right', () => {
-    expect(calcTailDirection('right')).toEqual('up');
+    expect(getTailDirection('right')).toEqual('up');
   });
 
   it('Returns the correct result when the direction is down', () => {
-    expect(calcTailDirection('down')).toEqual('right');
+    expect(getTailDirection('down')).toEqual('right');
   });
 
   it('Returns the correct result when the direction is left', () => {
-    expect(calcTailDirection('left')).toEqual('down');
+    expect(getTailDirection('left')).toEqual('down');
   });
 
   it('Returns an empty string when the direction is incorrect', () => {
-    expect(calcTailDirection('wrongdirection')).toEqual('');
+    expect(getTailDirection('wrongdirection')).toEqual('');
   });
 });

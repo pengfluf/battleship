@@ -1,8 +1,8 @@
-import calcShiftedInit from 'helpers/calcs/calcShiftedInit';
+import getValidationInit from 'helpers/getters/cell/getValidationInit';
 
-import checkNearCells from 'helpers/checkers/checkNearCells';
+import validateCells from 'helpers/validators/validateCells';
 
-import constructPart from 'helpers/builders/constructPart';
+import construct from './construct';
 
 /**
  * @typedef {Object} ShipBody
@@ -17,10 +17,10 @@ import constructPart from 'helpers/builders/constructPart';
  * in fact we build the ship entirely.
  * @param {number[]} initCell - Initial cell
  * @param {number} bodyLength - Body length
- * @param {Array} layout - Layout with cell coordinates.
+ * @param {Array} grid - Grid with cell coordinates.
  * @returns {ShipBody} - Info about ship body.
  */
-export default function buildBody(initCell, bodyLength, layout) {
+export default function buildBody(initCell, bodyLength, grid) {
   const coords = [];
   const occupiedCoords = [];
 
@@ -40,14 +40,14 @@ export default function buildBody(initCell, bodyLength, layout) {
 
     // TODO: Create separate function for the validation. DRY
 
-    // Calculate the initial shifted cell for further checking
-    const shiftedInit = calcShiftedInit(y, x, direction, 'ship');
+    // Calculate the initial shifted cell for further validation
+    const shiftedInit = getValidationInit(y, x, direction, 'ship');
 
     // Utility
     const [shiftedY, shiftedX] = [shiftedInit[0], shiftedInit[1]];
 
     // Getting coords of cells occupied by the ship
-    occupiedCoords.push(...checkNearCells(shiftedY, shiftedX, layout));
+    occupiedCoords.push(...validateCells(shiftedY, shiftedX, grid));
 
     // If we didn't get occupied coords at all, it means that
     // the direction is wrong, so we don't actually need it.
@@ -57,11 +57,11 @@ export default function buildBody(initCell, bodyLength, layout) {
     directions.splice(directionIndex, 1);
 
     trials += 1;
-    if (trials > layout.length * 2) break;
+    if (trials > grid.length * 2) break;
   }
 
   if (directionIsCorrect) {
-    coords.push(...constructPart(y, x, direction, bodyLength));
+    coords.push(...construct(y, x, direction, bodyLength));
   }
 
   return {

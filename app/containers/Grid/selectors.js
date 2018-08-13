@@ -5,7 +5,8 @@ import { initialState } from './reducer';
  * Direct selector to the grid state domain
  */
 
-const selectGridDomain = state => state.get('grid', initialState);
+const selectGridDomain = state =>
+  state.get('gridContainer', initialState);
 
 /**
  * Other specific selectors
@@ -15,8 +16,8 @@ const selectGridDomain = state => state.get('grid', initialState);
  * Default selector used by Grid
  */
 
-const makeSelectGrid = () =>
+const makeSelectGridContainer = () =>
   createSelector(selectGridDomain, substate => substate.toJS());
 
-export default makeSelectGrid;
+export default makeSelectGridContainer;
 export { selectGridDomain };

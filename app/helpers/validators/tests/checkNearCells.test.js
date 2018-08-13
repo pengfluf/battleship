@@ -1,18 +1,18 @@
 import generateGrid from 'helpers/generators/generateGrid';
 
-import checkNearCells from '../checkNearCells';
+import validateCells from '../validateCells';
 
-describe('checkNearCells', () => {
-  let layout = [];
+describe('validateCells', () => {
+  let grid = [];
   const y = 5;
   const x = 5;
 
   beforeEach(() => {
-    layout = generateGrid(10);
+    grid = generateGrid(10);
   });
 
   // Expected result is the same for all modes because
-  // all of the cells of a new layout around [5,5] cell are
+  // all of the cells of a new grid around [5,5] cell are
   // valid, existing and unchecked
   const expected = [
     [4, 4],
@@ -44,34 +44,36 @@ describe('checkNearCells', () => {
   ];
 
   it('Returns the correct result in the filtrating mode', () => {
-    expect(checkNearCells(y, x, layout, 'filter')).toEqual(expected);
+    expect(validateCells(y, x, grid, 'filter')).toEqual(expected);
   });
 
   it('Returns an empty array in filtrating mode when some of the cells are not valid', () => {
-    layout[6][4] = undefined;
-    layout[6][5].isShip = true;
-    layout[6][6].occupied = true;
+    grid[6][4] = undefined;
+    grid[6][5].isShip = true;
+    grid[6][6].occupied = true;
 
-    expect(checkNearCells(y, x, layout, 'filter')).toEqual([]);
+    expect(validateCells(y, x, grid, 'filter')).toEqual([]);
   });
 
   it('Returns the correct result in the collect mode', () => {
-    expect(checkNearCells(y, x, layout, 'collect')).toEqual(
+    expect(validateCells(y, x, grid, 'collect')).toEqual(
       expectedWhenClicked,
     );
   });
 
-  it('Returns the correct result in the findUnchecked mode', () => {
-    expect(checkNearCells(y, x, layout, 'findUnchecked')).toEqual(expected);
+  it('Returns the correct result in the getUnchecked mode', () => {
+    expect(validateCells(y, x, grid, 'getUnchecked')).toEqual(
+      expected,
+    );
   });
 
   it('Returns an empty array when y or x are less than 0', () => {
-    expect(checkNearCells(-5, -5, layout)).toEqual([]);
+    expect(validateCells(-5, -5, grid)).toEqual([]);
   });
 
-  it('Returns an empty array when y or x are greater than the layout.length - 1', () => {
+  it('Returns an empty array when y or x are greater than the grid.length - 1', () => {
     expect(
-      checkNearCells(y + layout.length, x + layout.length, layout),
+      validateCells(y + grid.length, x + grid.length, grid),
     ).toEqual([]);
   });
 });

@@ -23,7 +23,7 @@ export const initialState = fromJS({
   gameStarted: false,
   canTurn: true,
   size: 10,
-  layout: [],
+  grid: [],
   idList: [],
   totalRemaining: 0,
   ships: {},
@@ -42,32 +42,53 @@ function gridReducer(state = initialState, action) {
     case FORBID_TURN:
       return state.set('canTurn', false);
     case CREATE_GRID:
-      return state.set('layout', fromJS(action.layout));
+      return state.set('grid', fromJS(action.grid));
     case CREATE_ID_LIST:
       return state.set('idList', fromJS(action.idList));
     case PLACE_SHIP:
       return state.withMutations(st => {
         action.shipCoords.forEach(pair => {
-          st.updateIn(['layout', pair[0], pair[1], 'isShip'], () => true)
-            .setIn(['layout', pair[0], pair[1], 'shipName'], action.shipName)
-            .setIn(['ships', action.shipName, 'remaining'], action.shipLength)
-            .setIn(['ships', action.shipName, 'color'], action.shipColor);
+          st.updateIn(
+            ['grid', pair[0], pair[1], 'isShip'],
+            () => true,
+          )
+            .setIn(
+              ['grid', pair[0], pair[1], 'shipName'],
+              action.shipName,
+            )
+            .setIn(
+              ['ships', action.shipName, 'remaining'],
+              action.shipLength,
+            )
+            .setIn(
+              ['ships', action.shipName, 'color'],
+              action.shipColor,
+            );
         });
         action.occupiedCoords.forEach(pair => {
-          st.updateIn(['layout', pair[0], pair[1], 'occupied'], () => true);
+          st.updateIn(
+            ['grid', pair[0], pair[1], 'occupied'],
+            () => true,
+          );
         });
         st.update('totalRemaining', val => val + action.shipLength);
       });
     case CHECK_CELLS:
       return state.withMutations(st => {
         action.coords.forEach(pair => {
-          st.updateIn(['layout', pair[0], pair[1], 'checked'], () => true);
+          st.updateIn(
+            ['grid', pair[0], pair[1], 'checked'],
+            () => true,
+          );
         });
       });
     case DAMAGE_SHIP:
       return state
         .update('totalRemaining', val => val - 1)
-        .updateIn(['ships', action.name, 'remaining'], val => val - 1);
+        .updateIn(
+          ['ships', action.name, 'remaining'],
+          val => val - 1,
+        );
     case USER_SCORED:
       return state.updateIn(['scores', 'user'], val => val + 1);
     case COMPUTER_SCORED:

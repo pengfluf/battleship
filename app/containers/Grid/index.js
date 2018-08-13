@@ -19,13 +19,13 @@ import InfoPane from 'components/InfoPane';
 import generateGrid from 'helpers/generators/generateGrid';
 import generateIDList from 'helpers/generators/generateIDList';
 import buildShip from 'helpers/builders/buildShip';
-import checkNearCells from 'helpers/checkers/checkNearCells';
+import validateCells from 'helpers/validators/validateCells';
 
-import calcRandomUnchecked from 'helpers/calcs/calcRandomUnchecked';
+import getUnchecked from 'helpers/getters/cell/getUnchecked';
 
 import GridWrapper from './styled/GridWrapper';
 
-import makeSelectGrid from './selectors';
+import makeSelectGridContainer from './selectors';
 import {
   startGame,
   allowTurn,
@@ -49,7 +49,9 @@ export class Grid extends React.Component {
 
   componentDidMount() {
     // IDs for the rows. Need to be generated only once.
-    this.props.createIDList(generateIDList(this.props.grid.size));
+    this.props.createIDList(
+      generateIDList(this.props.gridContainer.size),
+    );
     this.reset();
   }
 
@@ -73,7 +75,10 @@ export class Grid extends React.Component {
       },
     ];
     ships.forEach((item, index) => {
-      const ship = buildShip(this.props.grid.layout, item.name);
+      const ship = buildShip(
+        this.props.gridContainer.grid,
+        item.name,
+      );
       this.props.placeShip(
         ship.shipCoords,
         ship.occupiedCoords,
@@ -86,10 +91,10 @@ export class Grid extends React.Component {
 
   turn(cell, rowIndex, cellIndex, whose) {
     if (cell.isShip) {
-      const cells = checkNearCells(
+      const cells = validateCells(
         rowIndex,
         cellIndex,
-        this.props.grid.layout,
+        this.props.gridContainer.grid,
         'collect',
       );
       this.props.checkCells(cells);
@@ -104,7 +109,7 @@ export class Grid extends React.Component {
     }
   }
 
-  computerTurn(cell, layout) {
+  computerTurn(cell, grid) {
     // The cell argument is user's choice which
     // was made before.
 
@@ -116,9 +121,9 @@ export class Grid extends React.Component {
     // If we damage the ship, computer can't make the
     // next turn, otherwise it obviously can.
     if (!cell.isShip) {
-      const randomCellCoords = calcRandomUnchecked(layout);
+      const randomCellCoords = getUnchecked(grid);
       const [y, x] = [randomCellCoords[0], randomCellCoords[1]];
-      const randomCell = layout[y][x];
+      const randomCell = grid[y][x];
 
       // Delay for human beings, computer is too fast
       const timerId = setInterval(() => {
@@ -134,19 +139,21 @@ export class Grid extends React.Component {
   }
 
   makeTurn(cell, rowIndex, cellIndex) {
-    if (this.props.grid.canTurn && !cell.checked) {
-      const { layout } = this.props.grid;
+    if (this.props.gridContainer.canTurn && !cell.checked) {
+      const { grid } = this.props.gridContainer;
       // User's turn.
       this.turn(cell, rowIndex, cellIndex, 'user');
       // Computer's turn.
-      this.computerTurn(cell, layout);
+      this.computerTurn(cell, grid);
     }
   }
 
   reset() {
     this.props.resetStats();
     // Generate grid
-    this.props.createGrid(generateGrid(this.props.grid.size));
+    this.props.createGrid(
+      generateGrid(this.props.gridContainer.size),
+    );
     // Build ships and place them on a board
     setTimeout(() => {
       this.buildShips();
@@ -155,24 +162,26 @@ export class Grid extends React.Component {
 
   render() {
     const {
-      layout,
+      grid,
       idList,
       gameStarted,
       scores,
       canTurn,
       ships,
       totalRemaining,
-    } = this.props.grid;
+    } = this.props.gridContainer;
     if (gameStarted) {
       return (
         <Fragment>
           <InfoPane scores={scores} canTurn={canTurn} />
           <GridWrapper>
-            {layout.map((row, rowIndex) => (
+            {grid.map((row, rowIndex) => (
               <Row key={idList[rowIndex]}>
                 {row.map((cell, cellIndex) => (
                   <Cell
-                    onClick={() => this.makeTurn(cell, rowIndex, cellIndex)}
+                    onClick={() =>
+                      this.makeTurn(cell, rowIndex, cellIndex)
+                    }
                     key={cell.id}
                     cell={cell}
                     ship={
@@ -202,11 +211,11 @@ export class Grid extends React.Component {
 }
 
 Grid.propTypes = {
-  grid: PropTypes.shape({
+  gridContainer: PropTypes.shape({
     gameStarted: PropTypes.bool,
     canTurn: PropTypes.bool,
     size: PropTypes.number,
-    layout: PropTypes.array,
+    grid: PropTypes.array,
     idList: PropTypes.array,
     totalRemaining: PropTypes.number,
     ships: PropTypes.object,
@@ -226,7 +235,7 @@ Grid.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  grid: makeSelectGrid(),
+  gridContainer: makeSelectGridContainer(),
 });
 
 export function mapDispatchToProps(dispatch) {
@@ -234,11 +243,23 @@ export function mapDispatchToProps(dispatch) {
     startGame: () => dispatch(startGame()),
     allowTurn: () => dispatch(allowTurn()),
     forbidTurn: () => dispatch(forbidTurn()),
-    createGrid: layout => dispatch(createGrid(layout)),
+    createGrid: grid => dispatch(createGrid(grid)),
     createIDList: idList => dispatch(createIDList(idList)),
-    placeShip: (shipCoords, occupiedCoords, shipLength, shipName, shipColor) =>
+    placeShip: (
+      shipCoords,
+      occupiedCoords,
+      shipLength,
+      shipName,
+      shipColor,
+    ) =>
       dispatch(
-        placeShip(shipCoords, occupiedCoords, shipLength, shipName, shipColor),
+        placeShip(
+          shipCoords,
+          occupiedCoords,
+          shipLength,
+          shipName,
+          shipColor,
+        ),
       ),
     checkCells: cells => dispatch(checkCells(cells)),
     damageShip: name => dispatch(damageShip(name)),

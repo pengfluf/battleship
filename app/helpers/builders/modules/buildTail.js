@@ -29,7 +29,7 @@ export default function buildTail(lastCell, bodyDirection, grid) {
     // TODO: Create separate function for the validation. DRY
 
     // Calculate the initial shifted cell for further validation
-    const shiftedInit = getValidationInit(
+    const validationInit = getValidationInit(
       y,
       x,
       tailDirection,
@@ -37,17 +37,25 @@ export default function buildTail(lastCell, bodyDirection, grid) {
     );
 
     // Utility
-    const [shiftedY, shiftedX] = [shiftedInit[0], shiftedInit[1]];
+    const [validationY, validationX] = [
+      validationInit[0],
+      validationInit[1],
+    ];
 
     if (
-      shiftedY >= 0 &&
-      shiftedX >= 0 &&
-      shiftedY <= grid.length - 1 &&
-      shiftedX <= grid.length - 1
+      validationY >= 0 &&
+      validationX >= 0 &&
+      validationY <= grid.length - 1 &&
+      validationX <= grid.length - 1
     ) {
       // Getting coords of cells occupied by the ship
       occupiedCoords.push(
-        ...validateTail(shiftedY, shiftedX, tailDirection, grid),
+        ...validateTail(
+          validationY,
+          validationX,
+          tailDirection,
+          grid,
+        ),
       );
     }
 

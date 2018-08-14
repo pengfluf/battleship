@@ -41,13 +41,18 @@ export default function buildBody(initCell, bodyLength, grid) {
     // TODO: Create separate function for the validation. DRY
 
     // Calculate the initial shifted cell for further validation
-    const shiftedInit = getValidationInit(y, x, direction, 'ship');
+    const validationInit = getValidationInit(y, x, direction, 'ship');
 
     // Utility
-    const [shiftedY, shiftedX] = [shiftedInit[0], shiftedInit[1]];
+    const [validationY, validationX] = [
+      validationInit[0],
+      validationInit[1],
+    ];
 
     // Getting coords of cells occupied by the ship
-    occupiedCoords.push(...validateCells(shiftedY, shiftedX, grid));
+    occupiedCoords.push(
+      ...validateCells(validationY, validationX, grid),
+    );
 
     // If we didn't get occupied coords at all, it means that
     // the direction is wrong, so we don't actually need it.

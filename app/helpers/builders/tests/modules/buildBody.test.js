@@ -9,7 +9,7 @@ import buildBody from 'helpers/builders/modules/buildBody';
 describe('buildBody', () => {
   let grid = [];
   let body = null;
-  let shiftedInit = [];
+  let validationInit = [];
   const bodyLength = 3;
   const initCell = [5, 5];
   const [y, x] = [initCell[0], initCell[1]];
@@ -29,10 +29,10 @@ describe('buildBody', () => {
 
   it('Returns the correct result', () => {
     body = buildBody(initCell, bodyLength, grid);
-    shiftedInit = getValidationInit(y, x, body.direction, 'body');
+    validationInit = getValidationInit(y, x, body.direction, 'body');
     const occupiedCoords = validateCells(
-      shiftedInit[0],
-      shiftedInit[1],
+      validationInit[0],
+      validationInit[1],
       grid,
     );
 

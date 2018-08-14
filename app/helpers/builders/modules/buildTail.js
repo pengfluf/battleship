@@ -71,6 +71,7 @@ export default function buildTail(lastCell, bodyDirection, grid) {
     coords.push(...construct(y, x, tailDirection, 1));
   }
 
+  // Coords means coordinates, but it's too looooong
   return {
     coords,
     occupiedCoords,

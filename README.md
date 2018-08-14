@@ -47,11 +47,11 @@ const ship = buildShip(grid, 'LShaped');
 const ship = buildShip(grid, 'LShaped');
 // ship.shipCoords = [[5,5], [4,5], [3,5], [2,5]];
 
-ship.shipCoords.forEach(() => {
-  doSomethingWithShipCoordinates();
+ship.shipCoords.forEach((y, x) => {
+  doSomethingWithShipCoordinates(y, x);
 });
 
-ship.occupiedCoords.forEach(() => {
-  dispatch(someAction());
+ship.occupiedCoords.forEach((y, x) => {
+  dispatch(someAction(y, x));
 });
 ```

@@ -11,8 +11,8 @@ import buildTail from './modules/buildTail';
  * @param {Array} grid - Grid with cell coordinates.
  * @param {string} type - Ship type. Can be 'LShaped', 'dotShaped'.
  * If not specified, will be just regular vertical / horizontal.
- * @returns {{shipCoords: Array, occupiedCoords: Array}} - All the coordinates
- * occupied by the ship.
+ * @returns {{shipCoords: Array, occupiedCoords: Array}} - Ship coordinates
+ * and all the coordinates occupied by the ship.
  */
 export default function buildShip(grid, type) {
   const shipCoords = [];
@@ -64,6 +64,7 @@ export default function buildShip(grid, type) {
     initCell = getInit(grid);
   }
 
+  // Coords means coordinates, but it's too looooong
   return {
     shipCoords,
     occupiedCoords,

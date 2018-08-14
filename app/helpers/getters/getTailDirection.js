@@ -9,6 +9,8 @@
  * empty string if tail cannot be built.
  */
 
+// Tail direction of L letter is always fixed,
+// can't be mirrored and has only 4 possible positions.
 export default function getTailDirection(bodyDirection) {
   switch (bodyDirection) {
     case 'up':

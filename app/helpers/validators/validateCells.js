@@ -10,13 +10,17 @@
  * only valid cells, uncheckedAndEmpty them all or find only those
  * that are needed for the full ship destroying.
  * @returns {Array} - Coordinates of valid or just
- * uncheckedAndEmptyed cells.
+ * uncheckedAndEmpty or unchecked cells.
  */
 export default function validateCells(y, x, grid, mode) {
   const result = [];
+  // Prevent going beyond the grid borders
   if (y < 0 || x < 0) return result;
   if (y > grid.length - 1 || x > grid.length - 1) return result;
 
+  // We always check the 3x3 square from the
+  // upper left corner or, if we are
+  // extremely close to the border, the 2x3 square.
   for (
     let i = y > 0 ? -1 : 0;
     y === grid.length - 1 ? i < 1 : i < 2;
@@ -28,7 +32,8 @@ export default function validateCells(y, x, grid, mode) {
       j += 1
     ) {
       if (mode === 'uncheckedAndEmpty') {
-        // uncheckedAndEmpty mode
+        // Find all the unchecked cells
+        // without ships
         if (
           !grid[y + i][x + j].isShip &&
           !grid[y + i][x + j].checked

@@ -69,6 +69,7 @@ export default function buildBody(initCell, bodyLength, grid) {
     coords.push(...construct(y, x, direction, bodyLength));
   }
 
+  // Coords means coordinates, but it's too looooong
   return {
     direction,
     coords,

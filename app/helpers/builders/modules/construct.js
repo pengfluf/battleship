@@ -10,7 +10,7 @@
  */
 
 export default function construct(y, x, direction, bodyLength) {
-  const result = [];
+  const shipCoords = [];
   let tailShift = 0;
 
   // If bodyLength equals 1, it means that we're
@@ -21,26 +21,27 @@ export default function construct(y, x, direction, bodyLength) {
   switch (direction) {
     case 'up':
       for (let i = tailShift; i < bodyLength + tailShift; i += 1) {
-        result.push([y - i, x]);
+        shipCoords.push([y - i, x]);
       }
       break;
     case 'right':
       for (let i = tailShift; i < bodyLength + tailShift; i += 1) {
-        result.push([y, x + i]);
+        shipCoords.push([y, x + i]);
       }
       break;
     case 'down':
       for (let i = tailShift; i < bodyLength + tailShift; i += 1) {
-        result.push([y + i, x]);
+        shipCoords.push([y + i, x]);
       }
       break;
     case 'left':
       for (let i = tailShift; i < bodyLength + tailShift; i += 1) {
-        result.push([y, x - i]);
+        shipCoords.push([y, x - i]);
       }
       break;
     default:
-      return result;
+      return shipCoords;
   }
-  return result;
+  // Coords means coordinates, but it's too looooong
+  return shipCoords;
 }

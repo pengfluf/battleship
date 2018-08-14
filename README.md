@@ -60,35 +60,35 @@ const grid = generateGrid(10);
 const initCell = getInit(grid); // e.g., [5,5]
 ```
 
-1. Next, we start building the ship body calling the ```buildBody(initCell, bodyLength, grid)```.
+2. Next, we start building the ship body calling the ```buildBody(initCell, bodyLength, grid)```.
 
   1. The ```buildBody()``` randomly chooses the **direction**, in which the ship will be built. For example, *up* from initial cell.
 
-  1. If the type of the ship is `dotShaped`, bodyLength will be equal to 1.
+  2. If the type of the ship is `dotShaped`, bodyLength will be equal to 1.
   If the ship is regular, `bodyLength` is 4.
   If `LShaped`, then 3. Wait, why 3 and not 4? It's because the body of the ship is only the straight part of the ship, but the `LShaped` ship isn't completely straight and its last cell is curved. This is the **tail**. Don't worry, we'll build it later.
 
-  1. Before starting the actual construction, we want to be sure, that we can do it and all cells incuding the occupied ones are valid. So, obviously, let's validate using ```validateCells(y, x, grid, mode)```. In its default mode it will return the array of valid **occupied cells** or, if at least one cell is invalid, am empty array. Also it has two additionals modes: `'uncheckedAndEmpty'` and `'unchecked'`. It's simple. The first one returns only the unchecked and cells that don't have ships. The second one returns all the unchecked cells.
+  3. Before starting the actual construction, we want to be sure, that we can do it and all cells incuding the occupied ones are valid. So, obviously, let's validate using ```validateCells(y, x, grid, mode)```. In its default mode it will return the array of valid **occupied cells** or, if at least one cell is invalid, am empty array. Also it has two additionals modes: `'uncheckedAndEmpty'` and `'unchecked'`. It's simple. The first one returns only the unchecked and cells that don't have ships. The second one returns all the unchecked cells.
 
-  1. For utility there's a ```getValidationInit(y, x, direction, type)``` function, that accepts the initial cell coordinates and returns the new cell coordinates for starting **any** validation. ```validateCells(y, x, grid, mode)``` uses `y` and `x` from ```getValidationInit()```.
+  4. For utility there's a ```getValidationInit(y, x, direction, type)``` function, that accepts the initial cell coordinates and returns the new cell coordinates for starting **any** validation. ```validateCells(y, x, grid, mode)``` uses `y` and `x` from ```getValidationInit()```.
 
-  1. If all validations passed, the ```construct(y, x, direction, bodyLength)``` will be called. It will return the actual coordinates of the ship and these coordinates will be pushed to the final result.
+  5. If all validations passed, the ```construct(y, x, direction, bodyLength)``` will be called. It will return the actual coordinates of the ship and these coordinates will be pushed to the final result.
 
 ```javascript
 // continuation
 const body = buildBody([5,5], 3, 'LShaped');
 ```
 
-1. Okay, that's all for regular or `dotShaped` ship, but what about `LShaped` ship and its tail? Let's build it. We'll be using ```buildTail(lastCell, bodyDirection, grid)``` all further steps.
-  3.1 The direction of the tail is always fixed. Let's assume, that the building direction of the body is *up*, then the tail direction will be *left* (just rotate the 'L' letter). ```buildTail()``` uses ```getTailDirection(bodyDirection)``` for this operation.
+3. Okay, that's all for regular or `dotShaped` ship, but what about `LShaped` ship and its tail? Let's build it. We'll be using ```buildTail(lastCell, bodyDirection, grid)``` all further steps.
+  1. The direction of the tail is always fixed. Let's assume, that the building direction of the body is *up*, then the tail direction will be *left* (just rotate the 'L' letter). ```buildTail()``` uses ```getTailDirection(bodyDirection)``` for this operation.
 
-  1. Next, we ```validateCells()``` and pass it result to the ```validateTail(y, x, direction, grid)```. If at least one cell is invalid, ```validateTail()``` will return an empty array, otherwise it will return cells **occupied** by the tail additionally.
+  2. Next, we ```validateCells()``` and pass it result to the ```validateTail(y, x, direction, grid)```. If at least one cell is invalid, ```validateTail()``` will return an empty array, otherwise it will return cells **occupied** by the tail additionally.
 
-  1. All the next steps are pretty similar. If validations are passed, the tail will be ```construct()```ed.
+  3. All the next steps are pretty similar. If validations are passed, the tail will be ```construct()```ed.
 
 ```javascript
 // continuation
 const tail = buildTail([3,5], 'up', grid);
 ```
 
-1. At the moment we have the body and the tail both, you can use it however you want. If you want to combine all of it into one ship, just use ```buildShip()```. It does all the operations from the above and finally combines it.
+4. At the moment we have the body and the tail both, you can use it however you want. If you want to combine all of it into one ship, just use ```buildShip()```. It does all the operations from the above and finally combines it.

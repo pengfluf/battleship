@@ -52,4 +52,4 @@ const tail = buildTail([3,5], 'up', grid);
 
 ## Combine it all 🚢🚣
 
-4. At the moment we have the body and the tail both, you can use it however you want. If you want to combine all of it into one ship, just use ```buildShip()```. It does all the operations from the above and finally combines it.
+At the moment we have the body and the tail both, you can use it however you want. If you want to combine all of it into one ship, just use ```buildShip()```. It does all the operations from the above and finally combines it.

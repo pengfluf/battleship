@@ -1,6 +1,6 @@
 # How this really works?
 
-Make sure you've already checked [Useful Terms](how-this-really-works.md) section. This will make reading and understanding the current section much easier.
+Make sure you've already checked [Useful Terms](useful-terms.md) section. This will make reading and understanding the current section much easier.
 
 I will not go into how the grid is generated. It's dead simple.
 I'll describe in more detail the building of ships.
@@ -33,7 +33,6 @@ For utility there's a ```getValidationInit(y, x, direction, type)``` function, t
 If all validations passed, the ```construct(y, x, direction, bodyLength)``` will be called. It will return the actual coordinates of the ship and these coordinates will be pushed to the final result.
 
 ```javascript
-// continuation
 const body = buildBody([5,5], 3, 'LShaped');
 ```
 
@@ -48,7 +47,6 @@ Next, we ```validateCells()``` and pass it result to the ```validateTail(y, x, d
 All the next steps are pretty similar. If validations are passed, the tail will be ```construct()```ed.
 
 ```javascript
-// continuation
 const tail = buildTail([3,5], 'up', grid);
 ```
 

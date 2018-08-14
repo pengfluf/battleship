@@ -27,7 +27,7 @@ const Button = styled.button`
 
   margin-top: ${props => {
     if (props.start) {
-      return '50px';
+      return '35px';
     } else if (props.playAgain) {
       return '10px';
     }

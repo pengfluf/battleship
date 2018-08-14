@@ -13,6 +13,7 @@ Start the application at localhost:3000
 
 ## Documentation
 
+- [Project Structure](docs/project-structure.md)
 - [Useful Terms](docs/useful-terms.md)
 - [How this really works?](docs/how-this-really-works.md)
 

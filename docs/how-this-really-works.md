@@ -24,11 +24,11 @@ The ```buildBody()``` randomly chooses the **direction**, in which the ship will
   * If the ship is regular, `bodyLength` is 4.
   * If `LShaped`, then 3. Wait, why 3 and not 4? It's because the body of the ship is only the straight part of the ship, but the `LShaped` ship isn't completely straight and its last cell is curved. This is the **tail**. Don't worry, we'll build it later.
 
-Before starting the actual construction, we want to be sure, that we can do it and all cells incuding the occupied ones are valid. So, obviously, let's validate using ```validateCells(y, x, grid, mode)```. In its default mode it will return the array of valid **occupied cells** or, if at least one cell is invalid, am empty array.
+Before starting the actual construction, we want to be sure, that we can do it and all cells incuding the occupied ones are valid. So, obviously, let's validate using ```validateCells(y, x, grid, mode)```. In its default mode it will return the array of valid **occupied cells** or, if at least one cell is invalid, an empty array.
 
-Also it has two additionals modes: `'uncheckedAndEmpty'` and `'unchecked'`. It's simple. The first one returns only the unchecked and cells that don't have ships. The second one returns all the unchecked cells.
+Also it has two additionals modes: `'uncheckedAndEmpty'` and `'unchecked'`. The first one returns only the unchecked and cells that don't have ships. The second one returns all the unchecked cells.
 
-For utility there's a ```getValidationInit(y, x, direction, type)``` function, that accepts the initial cell coordinates and returns the new cell coordinates for starting **any** validation. ```validateCells(y, x, grid, mode)``` uses `y` and `x` from ```getValidationInit()```.
+For utility there's a ```getValidationInit(y, x, direction, type)``` function, that accepts the initial cell coordinates and returns the validation initial cell coordinates for starting **any** validation. Note, that ```validateCells(y, x, grid, mode)``` uses `y` and `x` from ```getValidationInit()```.
 
 If all validations passed, the ```construct(y, x, direction, bodyLength)``` will be called. It will return the actual coordinates of the ship and these coordinates will be pushed to the final result.
 
@@ -42,7 +42,7 @@ Okay, that's all for regular or `dotShaped` ship, but what about `LShaped` ship 
 
 The direction of the tail is always fixed. Let's assume, that the building direction of the body is *up*, then the tail direction will be *left* (just rotate the 'L' letter). ```buildTail()``` uses ```getTailDirection(bodyDirection)``` for this operation.
 
-Next, we ```validateCells()``` and pass it result to the ```validateTail(y, x, direction, grid)```. If at least one cell is invalid, ```validateTail()``` will return an empty array, otherwise it will return cells **occupied** by the tail additionally.
+Next, we ```validateCells()``` and pass it result to the ```validateTail(y, x, direction, grid)```. If at least one cell is invalid, ```validateTail()``` will return an empty array, otherwise it will return the cells **occupied** by the tail additionally.
 
 All the next steps are pretty similar. If validations are passed, the tail will be ```construct()```ed.
 

@@ -1,6 +1,6 @@
 # How this really works?
 
-Make sure you've already checked [Useful Terms](docs/how-this-really-works.md) section. This will make reading and understanding the current section much easier.
+Make sure you've already checked [Useful Terms](how-this-really-works.md) section. This will make reading and understanding the current section much easier.
 
 I will not go into how the grid is generated. It's dead simple.
 I'll describe in more detail the building of ships.

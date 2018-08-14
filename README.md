@@ -13,8 +13,8 @@ Start the application at localhost:3000
 
 ## Documentation
 
-[Useful Terms](docs/useful-terms.md)
-[How this really works?](docs/how-this-really-works.md)
+- [Useful Terms](docs/useful-terms.md)
+- [How this really works?](docs/how-this-really-works.md)
 
 ## Usage
 
@@ -34,4 +34,22 @@ You can create these `type`s of ships:
 ```javascript
 const grid = generateGrid(10);
 const ship = buildShip(grid, 'LShaped');
+```
+
+## Redux
+
+`buildShip()` returns an array of arrays with y and x cell coordinates in it. Note, that it returns the ships coordinate and the occupied ones **separately**, so you can easily manage it depending on your needs.
+
+## Example
+
+```javascript
+const ship = buildShip(grid, 'LShaped');
+
+ship.shipCoords.forEach(() => {
+  doSomethingWithShipCoordinates();
+});
+
+ship.occupiedCoords.forEach(() => {
+  dispatch(someAction());
+});
 ```

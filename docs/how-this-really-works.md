@@ -33,7 +33,7 @@ For utility there's a ```getValidationInit(y, x, direction, type)``` function, t
 If all validations passed, the ```construct(y, x, direction, bodyLength)``` will be called. It will return the actual coordinates of the ship and these coordinates will be pushed to the final result.
 
 ```javascript
-const body = buildBody([5,5], 3, 'LShaped');
+const body = buildBody([5,5], 3, grid);
 ```
 
 ## Tail Building 🐈

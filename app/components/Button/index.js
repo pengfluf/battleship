@@ -19,6 +19,7 @@ const Button = styled.button`
   border: 5px solid white;
   border-radius: 5px;
   background-color: rgba(255, 255, 255, 0.8);
+  outline: none;
 
   &:hover {
     color: white;
@@ -27,7 +28,7 @@ const Button = styled.button`
 
   margin-top: ${props => {
     if (props.start) {
-      return '35px';
+      return '25px';
     } else if (props.playAgain) {
       return '10px';
     }

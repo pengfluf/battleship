@@ -6,7 +6,6 @@ const DocumentationLink = styled.a`
 
   display: inline-flex;
   align-self: ${props => (props.startPane ? 'flex-end' : 'center')};
-  margin-right: 10px;
 
   margin-top: ${props => (props.startPane ? '0px' : '20px')};
 
@@ -15,6 +14,7 @@ const DocumentationLink = styled.a`
   color: #000;
   border-bottom-width: 1px;
   border-bottom-style: dashed;
+  outline: none;
 
   &:hover {
     border-bottom-style: solid;

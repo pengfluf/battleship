@@ -44,6 +44,7 @@ const ship = buildShip(grid, 'LShaped');
 
 ```javascript
 const ship = buildShip(grid, 'LShaped');
+// ship.shipCoords = [[5,5], [4,5], [3,5], [2,5]];
 
 ship.shipCoords.forEach(() => {
   doSomethingWithShipCoordinates();

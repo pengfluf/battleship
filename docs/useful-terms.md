@@ -1,4 +1,4 @@
-## Useful terms
+## Useful Terms
 Initial cell – random valid cell, starting point of the ship construction. Use ```getInit(grid)```.
 
 Ship body – only the straight part of the ship. For example, bodyLength of regular 4 cells ship is 4, but `LShaped` 4 cells ship has bodyLength equals to 3, because its last cell is curved. This is the **tail**.
